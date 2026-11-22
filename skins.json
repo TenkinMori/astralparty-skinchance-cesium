@@ -1041,6 +1041,27 @@
     "bustSfw": []
   },
   {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113006,
+    "skinName": "晨暑惊眠-枫",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_113_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_04_0",
+      "UT_Hero_Bust_113_04_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_113_04_0",
+      "UT_Hero_Bust_113_04_1_sfw"
+    ]
+  },
+  {
     "heroId": 114,
     "heroName": "蓝海晴",
     "group": 114,
@@ -1437,6 +1458,27 @@
     "bustSfw": []
   },
   {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117006,
+    "skinName": "钢羽森姬-茉莉",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 3,
+    "character": "UT_Hero_Card_117_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_04_0",
+      "UT_Hero_Bust_117_04_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_117_04_0_sfw",
+      "UT_Hero_Bust_117_04_1_sfw"
+    ]
+  },
+  {
     "heroId": 118,
     "heroName": "阿尔",
     "group": 118,
@@ -1561,6 +1603,27 @@
       "UT_Hero_Bust_119_02_1"
     ],
     "bustSfw": []
+  },
+  {
+    "heroId": 119,
+    "heroName": "星魅琉华",
+    "group": 119,
+    "itemId": 100119005,
+    "skinName": "仓栗骑士-琉华",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_119_03",
+    "inGameCharacter": "UT_Hero_InGameCard_119_03",
+    "inGameCharacterSfw": "UT_Hero_InGameCard_119_03_sfw",
+    "bust": [
+      "UT_Hero_Bust_119_03_0",
+      "UT_Hero_Bust_119_03_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_119_03_0_sfw",
+      "UT_Hero_Bust_119_03_1_sfw"
+    ]
   },
   {
     "heroId": 120,
@@ -2422,9 +2485,45 @@
   },
   {
     "heroId": 307,
-    "heroName": "天川苍鲤",
+    "heroName": "角色 307",
     "group": 307,
     "itemId": 100307001,
+    "skinName": "初始皮肤-远野汉娜",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_307",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_307_0",
+      "UT_Hero_Bust_307_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 308,
+    "heroName": "角色 308",
+    "group": 308,
+    "itemId": 100308001,
+    "skinName": "初始皮肤-橘雪莉",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_308",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_308_0",
+      "UT_Hero_Bust_308_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 9001,
+    "heroName": "天川苍鲤",
+    "group": 9001,
+    "itemId": 1009001001,
     "skinName": "初始皮肤-天川苍鲤",
     "isDefault": true,
     "index": 0,

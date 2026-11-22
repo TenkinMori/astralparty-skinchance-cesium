@@ -64,6 +64,7 @@
 | 姬梦枫 | 113 | 113 | 100113003 | 战斗女仆-枫 |  | UT_Hero_Card_113_01 | UT_Hero_Bust_113_01_0 / UT_Hero_Bust_113_01_1 |
 | 姬梦枫 | 113 | 113 | 100113004 | 锦跃游龙-枫 |  | UT_Hero_Card_113_02 | UT_Hero_Bust_113_02_0 / UT_Hero_Bust_113_02_1 |
 | 姬梦枫 | 113 | 113 | 100113005 | 潮流公主-枫 |  | UT_Hero_Card_113_03 | UT_Hero_Bust_113_03_0 / UT_Hero_Bust_113_03_1 |
+| 姬梦枫 | 113 | 113 | 100113006 | 晨暑惊眠-枫 |  | UT_Hero_Card_113_04 | UT_Hero_Bust_113_04_0 / UT_Hero_Bust_113_04_1 |
 | 蓝海晴 | 114 | 114 | 100114001 | 初始皮肤-蓝海晴 | 是 | UT_Hero_Card_114 | UT_Hero_Bust_114_0 / UT_Hero_Bust_114_1 |
 | 蓝海晴 | 114 | 114 | 100114002 | 羁绊皮肤-蓝海晴 |  | UT_Hero_Card_114_Max | UT_Hero_Bust_114_Max_0 / UT_Hero_Bust_114_Max_1 |
 | 蓝海晴 | 114 | 114 | 100114003 | 变装派对-蓝海晴 |  | UT_Hero_Card_114_01 | UT_Hero_Bust_114_01_0 / UT_Hero_Bust_114_01_1 |
@@ -85,6 +86,7 @@
 | 茉莉 | 117 | 117 | 100117003 | 节日盛装-茉莉 |  | UT_Hero_Card_117_01 | UT_Hero_Bust_117_01_0 / UT_Hero_Bust_117_01_1 |
 | 茉莉 | 117 | 117 | 100117004 | 冲浪海岸-茉莉 |  | UT_Hero_Card_117_02 | UT_Hero_Bust_117_02_0 / UT_Hero_Bust_117_02_1 |
 | 茉莉 | 117 | 117 | 100117005 | 后厨能手-茉莉 |  | UT_Hero_Card_117_03 | UT_Hero_Bust_117_03_0 / UT_Hero_Bust_117_03_1 |
+| 茉莉 | 117 | 117 | 100117006 | 钢羽森姬-茉莉 |  | UT_Hero_Card_117_04 | UT_Hero_Bust_117_04_0 / UT_Hero_Bust_117_04_1 |
 | 阿尔 | 118 | 118 | 100118001 | 初始皮肤-阿尔 | 是 | UT_Hero_Card_118 | UT_Hero_Bust_118_0 / UT_Hero_Bust_118_1 |
 | 阿尔 | 118 | 118 | 100118002 | 羁绊皮肤-阿尔 |  | UT_Hero_Card_118_Max | UT_Hero_Bust_118_Max_0 / UT_Hero_Bust_118_Max_1 |
 | 阿尔 | 118 | 118 | 100118003 | 番茄酱魔法-阿尔 |  | UT_Hero_Card_118_01 | UT_Hero_Bust_118_01_0 / UT_Hero_Bust_118_01_1 |
@@ -92,6 +94,7 @@
 | 星魅琉华 | 119 | 119 | 100119002 | 羁绊皮肤-琉华 |  | UT_Hero_Card_119_Max | UT_Hero_Bust_119_Max_0 / UT_Hero_Bust_119_Max_1 |
 | 星魅琉华 | 119 | 119 | 100119003 | 转角之期-星魅琉华 |  | UT_Hero_Card_119_01 | UT_Hero_Bust_119_01_0 / UT_Hero_Bust_119_01_1 |
 | 星魅琉华 | 119 | 119 | 100119004 | 特别礼物-琉华 |  | UT_Hero_Card_119_02 | UT_Hero_Bust_119_02_0 / UT_Hero_Bust_119_02_1 |
+| 星魅琉华 | 119 | 119 | 100119005 | 仓栗骑士-琉华 |  | UT_Hero_Card_119_03 | UT_Hero_Bust_119_03_0 / UT_Hero_Bust_119_03_1 |
 | 南希露 | 120 | 120 | 100120001 | 初始皮肤-南希露 | 是 | UT_Hero_Card_120 | UT_Hero_Bust_120_0 / UT_Hero_Bust_120_1 |
 | 南希露 | 120 | 120 | 100120002 | 羁绊皮肤-南希露 |  | UT_Hero_Card_120_Max | UT_Hero_Bust_120_Max_0 / UT_Hero_Bust_120_Max_1 |
 | 南希露 | 120 | 120 | 100120003 | 雍容盛景-南希露 |  | UT_Hero_Card_120_01 | UT_Hero_Bust_120_01_0 / UT_Hero_Bust_120_01_1 |
@@ -138,6 +141,8 @@
 | 多萝西·海兹 | 304 | 304 | 100304001 | 初始皮肤-多萝西 | 是 | UT_Hero_Card_304 | UT_Hero_Bust_304_0 / UT_Hero_Bust_304_1 |
 | 远野汉娜 | 305 | 305 | 100305001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_305 | UT_Hero_Bust_305_1 / UT_Hero_Bust_305_0 |
 | 橘雪莉 | 306 | 306 | 100306001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_306 | UT_Hero_Bust_306_0 / UT_Hero_Bust_306_1 |
-| 天川苍鲤 | 307 | 307 | 100307001 | 初始皮肤-天川苍鲤 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
+| 角色 307 | 307 | 307 | 100307001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
+| 角色 308 | 308 | 308 | 100308001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_308 | UT_Hero_Bust_308_0 / UT_Hero_Bust_308_1 |
+| 天川苍鲤 | 9001 | 9001 | 1009001001 | 初始皮肤-天川苍鲤 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
 
-共 **36** 个角色、**131** 条皮肤立绘。
+共 **38** 个角色、**136** 条皮肤立绘。

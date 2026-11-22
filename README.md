@@ -7,11 +7,11 @@
 - 一张图一个档位，血量掉到阈值以下就换下一档；未配置的皮肤完全不动。
 - 贴图放在模组目录里，改 JSON 立即生效，不用重开游戏。
 
-> 资源名对照表见 [SKINS.md](SKINS.md)：共 36 个角色、131 条皮肤立绘，`皮肤 ItemID` 就是配置里要填的 `itemId`。
+> 资源名对照表见 [SKINS.md](SKINS.md)：按最新 GameData（3.3.0）抽取，共 38 个角色、136 条皮肤立绘，`皮肤 ItemID` 就是配置里要填的 `itemId`。
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.0.0.zip`。
+1. 下载 Release 里的 `SkinChanceMod-1.0.1.zip`。
 2. 解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
 3. 在模组目录里建一个 `skins\` 子目录，把你的 PNG 丢进去（也可以是任意相对路径，见下）。
 4. 启动游戏，选人进局。
@@ -92,13 +92,19 @@
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.0.0.zip`。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.0.1.zip`。
 
 ## 本版核对事实
 
 - 游戏 SDK：3.8.7；清单 `sdkVersion` 写 `3.8.1`。
 - 反编译核对：`UIBattleInfoPanel.cs:41/355`、`UICom_HeroSkin.cs`、`BattleInfoPanel.cs:529`、`CommonUIManager.cs:393`、`BattleProperty.cs:22/24`、`GLoader.cs:41/295/505`、`NGraphics.cs:150`。
 - 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（局内立绘）、字段 15 = `Bust`（左下图集），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
+- 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，38 角色 / 136 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**；客户端 Addressables 目录同样已是 `catalog_3.3.0`。
+
+## 更新日志
+
+- **1.0.1**：`SKINS.md` / `skins.json` 改用 3.3.0 数据重新抽取（36→38 角色、131→136 条皮肤，补上 `100117006 钢羽森姬-茉莉` 等）；模组代码无改动。
+- **1.0.0**：首个版本，按 HP 百分比切换局内左下角自己的立绘。
 
 ## 已知边界
 
