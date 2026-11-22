@@ -49,8 +49,11 @@ def main():
         "  damaged.png   受损（血量 26%-60%）\r\n"
         "  broken.png    重伤（血量 0%-25%）\r\n"
         "\r\n"
-        "尺寸建议和游戏原图一致（UT_Hero_Bust_* 一般是 1568x900），PNG 8bit、非隔行，\r\n"
-        "带透明通道没问题。改完重新进局就生效，不需要改 config.json。\r\n"
+        "要和游戏原图一致的话，左下角立绘是 UT_Hero_Card_<皮肤>\r\n"
+        "（例如钢羽森姬-茉莉是 UT_Hero_Card_117_04，1261x2048）。\r\n"
+        "注意不是 UT_Hero_Bust_*：那个是「发起 PK」用的小图，不是左下角。\r\n"
+        "\r\n"
+        "PNG 8bit、非隔行，带透明通道没问题。改完重新进局就生效，不需要改 config.json。\r\n"
     )
 
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as zf:

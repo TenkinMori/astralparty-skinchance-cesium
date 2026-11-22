@@ -80,8 +80,9 @@ mods\SkinChanceMod\skins\
 
 - 只支持 **PNG**（8 bit，非隔行，colorType 0/2/3/4/6），带透明通道没问题。
 - 尺寸随意，会按游戏原本的立绘框缩放（沿用原 loader 的 `fill`/`align`/`customOffset`/`customScale`）。
-- 建议和游戏原图同尺寸（`UT_Hero_Bust_*` 一般是 1568×900），避免缩放糊掉。
-- 立绘资源名见 SKINS.md 的「左下图集」列，可以从 `StreamingAssets\aa` 里用 AssetStudio/UnityPy 抽出来改。
+- 建议和游戏原图同尺寸（左下角立绘是 `UT_Hero_Card_*`，常见 1261×2048），避免缩放糊掉。
+- 立绘资源名见 SKINS.md 的「左下立绘」列，可以从 `StreamingAssets\aa` 里用 AssetStudio/UnityPy 抽出来改。
+- **注意别拿 `UT_Hero_Bust_*`**：那是「发起 PK」弹窗里的小图（`FightWindow.cs:888`），不是左下角立绘。
 
 ## 原理
 
@@ -99,7 +100,7 @@ mods\SkinChanceMod\skins\
 ```
 [SkinChanceMod] 战损立绘已加载：共 136 条皮肤规则。
 [SkinChanceMod] 已建好 136 个皮肤贴图文件夹：...\mods\SkinChanceMod\skins
-[SkinChanceMod] 已加载贴图 1568x900：...\mods\SkinChanceMod\skins\100117006_钢羽森姬-茉莉\full.png
+[SkinChanceMod] 已加载贴图 1261x2048：...\mods\SkinChanceMod\skins\100117006_钢羽森姬-茉莉\full.png
 [SkinChanceMod] 战损立绘已接管：皮肤 100117006 → skins/100117006_钢羽森姬-茉莉/full.png（HP 100%）。
 [SkinChanceMod] 立绘已切换：damaged.png（HP 55%）
 ```
@@ -122,7 +123,7 @@ mods\SkinChanceMod\skins\
 
 - 游戏 SDK：3.8.7；清单 `sdkVersion` 写 `3.8.1`。
 - 反编译核对：`UIBattleInfoPanel.cs:41/355`、`UICom_HeroSkin.cs`、`BattleInfoPanel.cs:529`、`CommonUIManager.cs:393`、`BattleProperty.cs:22/24`、`GLoader.cs:41/295/505`、`NGraphics.cs:150`。
-- 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（局内立绘）、字段 15 = `Bust`（左下图集），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
+- 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（**左下角立绘**，`BattleInfoPanel.RefreshHeroSkin()` 就用它）、字段 15 = `Bust`（PK 弹窗小图，别混），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
 - 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，38 角色 / 136 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**；客户端 Addressables 目录同样已是 `catalog_3.3.0`。
 - 缺档退化：`SkinRules.Candidates` 命中档 → 更完好 → 更残，离线单测 39 项全过（`_skintest`）。
 

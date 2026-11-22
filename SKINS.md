@@ -3,10 +3,11 @@
 自动从客户端 GameData 抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。
 
 - 配置里的 `itemId` 填本表「皮肤 ItemID」；未配置的皮肤不会被动。
-- `局内立绘` = `SkinStandingPaintingConfigureItem.Character`（`InGameCharacter` 全表只有 1 条非空，实际走它）；`左下图集` = 字段 15 `Bust`，局内左下角就是这套图，可拿去 `StreamingAssets/aa` 里对照取图。
+- **左下角立绘** = `SkinStandingPaintingConfigureItem.Character`（`BattleInfoPanel.RefreshHeroSkin()` → `GetCharacterInGame()`，`InGameCharacter` 全表只有 1 条非空，实际都走 `Character`）；AngelMode 下优先用同名的 `_sfw` 变体。
+- `Bust` 字段不是左下角立绘：只有 `FightWindow.cs:888` 的「发起 PK」图标用它（按金币阈值取 `[0]`/`[1]`），不要拿它当战损图。
 - 同一角色有多张皮肤，**ItemID 才是唯一键**（heroId 只用来分组）。
 
-| 角色 | 角色ID | 立绘组 | 皮肤 ItemID | 皮肤名 | 默认 | 局内立绘 | 左下图集 |
+| 角色 | 角色ID | 立绘组 | 皮肤 ItemID | 皮肤名 | 默认 | 左下立绘 | PK 图集 |
 |---|---|---|---|---|---|---|---|
 | 帕露南 | 101 | 101 | 100101001 | 初始皮肤-帕露南 | 是 | UT_Hero_Card_101 | UT_Hero_Bust_101_0 / UT_Hero_Bust_101_1 |
 | 帕露南 | 101 | 101 | 100101002 | 羁绊皮肤-帕露南 |  | UT_Hero_Card_101_Max | UT_Hero_Bust_101_Max_0 / UT_Hero_Bust_101_Max_1 |
