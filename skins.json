@@ -1,0 +1,2441 @@
+[
+  {
+    "heroId": 101,
+    "heroName": "帕露南",
+    "group": 101,
+    "itemId": 100101001,
+    "skinName": "初始皮肤-帕露南",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_101",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_101_0",
+      "UT_Hero_Bust_101_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 101,
+    "heroName": "帕露南",
+    "group": 101,
+    "itemId": 100101002,
+    "skinName": "羁绊皮肤-帕露南",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_101_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_101_Max_0",
+      "UT_Hero_Bust_101_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 101,
+    "heroName": "帕露南",
+    "group": 101,
+    "itemId": 100101003,
+    "skinName": "时尚达人-帕露南",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_101_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_101_01_0",
+      "UT_Hero_Bust_101_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 101,
+    "heroName": "帕露南",
+    "group": 101,
+    "itemId": 100101004,
+    "skinName": "善财天官-帕露南",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_101_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_101_02_0",
+      "UT_Hero_Bust_101_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102001,
+    "skinName": "初始皮肤-芬妮",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_102",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_0",
+      "UT_Hero_Bust_102_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102002,
+    "skinName": "羁绊皮肤-芬妮",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_102_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_Max_0",
+      "UT_Hero_Bust_102_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102003,
+    "skinName": "清凉盛夏-芬妮",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_102_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_01_0",
+      "UT_Hero_Bust_102_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102004,
+    "skinName": "超然解析-芬妮",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_102_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_02_0",
+      "UT_Hero_Bust_102_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102005,
+    "skinName": "科学怪探-芬妮",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_102_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_03_0",
+      "UT_Hero_Bust_102_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 102,
+    "heroName": "芬妮",
+    "group": 102,
+    "itemId": 100102006,
+    "skinName": "悠闲假日-芬妮",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_102_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_102_04_0",
+      "UT_Hero_Bust_102_04_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 103,
+    "heroName": "阿兰娜",
+    "group": 103,
+    "itemId": 100103001,
+    "skinName": "初始皮肤-阿兰娜",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_103",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_103_0",
+      "UT_Hero_Bust_103_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 103,
+    "heroName": "阿兰娜",
+    "group": 103,
+    "itemId": 100103002,
+    "skinName": "羁绊皮肤-阿兰娜",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_103_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_103_Max_0",
+      "UT_Hero_Bust_103_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 103,
+    "heroName": "阿兰娜",
+    "group": 103,
+    "itemId": 100103003,
+    "skinName": "悸动沙滩-阿兰娜",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_103_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_103_01_0",
+      "UT_Hero_Bust_103_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 103,
+    "heroName": "阿兰娜",
+    "group": 103,
+    "itemId": 100103004,
+    "skinName": "冒失少女-阿兰娜",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_103_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_103_02_0",
+      "UT_Hero_Bust_103_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 103,
+    "heroName": "阿兰娜",
+    "group": 103,
+    "itemId": 100103005,
+    "skinName": "魔女兵器-阿兰娜",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_103_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_103_03_0",
+      "UT_Hero_Bust_103_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 104,
+    "heroName": "小町",
+    "group": 104,
+    "itemId": 100104001,
+    "skinName": "初始皮肤-小町",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_104",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_104_0",
+      "UT_Hero_Bust_104_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 104,
+    "heroName": "小町",
+    "group": 104,
+    "itemId": 100104002,
+    "skinName": "羁绊皮肤-小町",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_104_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_104_Max_0",
+      "UT_Hero_Bust_104_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 104,
+    "heroName": "小町",
+    "group": 104,
+    "itemId": 100104003,
+    "skinName": "忍者为何？-小町",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_104_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_104_01_0",
+      "UT_Hero_Bust_104_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 104,
+    "heroName": "小町",
+    "group": 104,
+    "itemId": 100104004,
+    "skinName": "暗影狼灵-小町",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_104_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_104_02_0",
+      "UT_Hero_Bust_104_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 105,
+    "heroName": "派德曼",
+    "group": 105,
+    "itemId": 100105001,
+    "skinName": "初始皮肤-派德曼",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_105",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_105_0",
+      "UT_Hero_Bust_105_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 105,
+    "heroName": "派德曼",
+    "group": 105,
+    "itemId": 100105002,
+    "skinName": "羁绊皮肤-派德曼",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_105_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_105_Max_0",
+      "UT_Hero_Bust_105_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 105,
+    "heroName": "派德曼",
+    "group": 105,
+    "itemId": 100105003,
+    "skinName": "酷暑难耐-派德曼",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_105_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_105_01_0",
+      "UT_Hero_Bust_105_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 106,
+    "heroName": "帕帕拉",
+    "group": 106,
+    "itemId": 100106001,
+    "skinName": "初始皮肤-帕帕拉",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_106",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_106_0",
+      "UT_Hero_Bust_106_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 106,
+    "heroName": "帕帕拉",
+    "group": 106,
+    "itemId": 100106002,
+    "skinName": "羁绊皮肤-帕帕拉",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_106_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_106_Max_0",
+      "UT_Hero_Bust_106_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_106_Max_1",
+      "UT_Hero_Bust_106_Max_1"
+    ]
+  },
+  {
+    "heroId": 106,
+    "heroName": "帕帕拉",
+    "group": 106,
+    "itemId": 100106003,
+    "skinName": "护卫队长-帕帕拉",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_106_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_106_01_0",
+      "UT_Hero_Bust_106_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 106,
+    "heroName": "帕帕拉",
+    "group": 106,
+    "itemId": 100106004,
+    "skinName": "入夏露营-帕帕拉",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_106_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_106_02_0",
+      "UT_Hero_Bust_106_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107001,
+    "skinName": "初始皮肤-恋",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_107",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_0",
+      "UT_Hero_Bust_107_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107002,
+    "skinName": "羁绊皮肤-恋",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_107_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_Max_0",
+      "UT_Hero_Bust_107_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107003,
+    "skinName": "拉拉队-恋",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_107_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_01_0",
+      "UT_Hero_Bust_107_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107004,
+    "skinName": "可爱船长-恋",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_107_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_02_0",
+      "UT_Hero_Bust_107_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107005,
+    "skinName": "泳池派对-恋",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_107_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_03_0",
+      "UT_Hero_Bust_107_03_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_107_03_1",
+      "UT_Hero_Bust_107_03_1"
+    ]
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107006,
+    "skinName": "雪地精灵-恋",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_107_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_04_0",
+      "UT_Hero_Bust_107_04_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 107,
+    "heroName": "恋",
+    "group": 107,
+    "itemId": 100107007,
+    "skinName": "卡牌魔术-恋",
+    "isDefault": false,
+    "index": 6,
+    "appearanceType": 5,
+    "character": "UT_Hero_Card_107_05",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_107_05_0",
+      "UT_Hero_Bust_107_05_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_107_05_1",
+      "UT_Hero_Bust_107_05_1"
+    ]
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108001,
+    "skinName": "初始皮肤-米米",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_108",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_0",
+      "UT_Hero_Bust_108_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108002,
+    "skinName": "羁绊皮肤-米米",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_108_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_Max_0",
+      "UT_Hero_Bust_108_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_108_Max_0_sfw",
+      "UT_Hero_Bust_108_Max_1_sfw"
+    ]
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108003,
+    "skinName": "赛车女郎-米米",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 4,
+    "character": "UT_Hero_Card_108_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_01_0",
+      "UT_Hero_Bust_108_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108004,
+    "skinName": "冰沙快递-米米",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_108_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_02_0",
+      "UT_Hero_Bust_108_02_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_108_02_0",
+      "UT_Hero_Bust_108_02_1_sfw"
+    ]
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108005,
+    "skinName": "搬运魔法-米米",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_108_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_03_0",
+      "UT_Hero_Bust_108_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 108,
+    "heroName": "米米",
+    "group": 108,
+    "itemId": 100108006,
+    "skinName": "球队经理-米米",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_108_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_108_04_0",
+      "UT_Hero_Bust_108_04_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_108_04_0",
+      "UT_Hero_Bust_108_04_1_sfw"
+    ]
+  },
+  {
+    "heroId": 109,
+    "heroName": "Z3000",
+    "group": 109,
+    "itemId": 100109001,
+    "skinName": "初始皮肤-Z3000",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_109",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_109_0",
+      "UT_Hero_Bust_109_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 109,
+    "heroName": "Z3000",
+    "group": 109,
+    "itemId": 100109002,
+    "skinName": "羁绊皮肤-Z3000",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_109_Max_2",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_109_Max_0",
+      "UT_Hero_Bust_109_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 109,
+    "heroName": "Z3000",
+    "group": 109,
+    "itemId": 100109003,
+    "skinName": "探天助手-Z3000",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_109_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_109_01_0",
+      "UT_Hero_Bust_109_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 110,
+    "heroName": "潘大猛",
+    "group": 110,
+    "itemId": 100110001,
+    "skinName": "初始皮肤-潘大猛",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_110",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_110_0",
+      "UT_Hero_Bust_110_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 110,
+    "heroName": "潘大猛",
+    "group": 110,
+    "itemId": 100110002,
+    "skinName": "羁绊皮肤-潘大猛",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_110_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_110_Max_0",
+      "UT_Hero_Bust_110_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 111,
+    "heroName": "墨影",
+    "group": 111,
+    "itemId": 100111001,
+    "skinName": "初始皮肤-墨影",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_111",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_111_0",
+      "UT_Hero_Bust_111_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 111,
+    "heroName": "墨影",
+    "group": 111,
+    "itemId": 100111002,
+    "skinName": "羁绊皮肤-墨影",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_111_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_111_Max_0",
+      "UT_Hero_Bust_111_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 112,
+    "heroName": "璐璐",
+    "group": 112,
+    "itemId": 100112001,
+    "skinName": "初始皮肤-璐璐",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_112",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_112_0",
+      "UT_Hero_Bust_112_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 112,
+    "heroName": "璐璐",
+    "group": 112,
+    "itemId": 100112002,
+    "skinName": "羁绊皮肤-璐璐",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_112_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_112_Max_0",
+      "UT_Hero_Bust_112_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_112_Max_0",
+      "UT_Hero_Bust_112_Max_1_sfw"
+    ]
+  },
+  {
+    "heroId": 112,
+    "heroName": "璐璐",
+    "group": 112,
+    "itemId": 100112003,
+    "skinName": "宝箱怪-璐璐",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_112_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_112_01_0",
+      "UT_Hero_Bust_112_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_112_01_0",
+      "UT_Hero_Bust_112_01_1_sfw"
+    ]
+  },
+  {
+    "heroId": 112,
+    "heroName": "璐璐",
+    "group": 112,
+    "itemId": 100112004,
+    "skinName": "甜蜜陷阱-璐璐",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_112_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_112_02_0",
+      "UT_Hero_Bust_112_02_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_112_02_0_sfw",
+      "UT_Hero_Bust_112_02_1_sfw"
+    ]
+  },
+  {
+    "heroId": 112,
+    "heroName": "璐璐",
+    "group": 112,
+    "itemId": 100112005,
+    "skinName": "拉拉队员-璐璐",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_112_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_112_03_0",
+      "UT_Hero_Bust_112_03_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_112_03_0_sfw",
+      "UT_Hero_Bust_112_03_1_sfw"
+    ]
+  },
+  {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113001,
+    "skinName": "初始皮肤-枫",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_113",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_0",
+      "UT_Hero_Bust_113_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113002,
+    "skinName": "羁绊皮肤-枫",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_113_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_Max_0",
+      "UT_Hero_Bust_113_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113003,
+    "skinName": "战斗女仆-枫",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_113_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_01_0",
+      "UT_Hero_Bust_113_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_113_01_0",
+      "UT_Hero_Bust_113_01_1_sfw"
+    ]
+  },
+  {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113004,
+    "skinName": "锦跃游龙-枫",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_113_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_02_0",
+      "UT_Hero_Bust_113_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 113,
+    "heroName": "姬梦枫",
+    "group": 113,
+    "itemId": 100113005,
+    "skinName": "潮流公主-枫",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_113_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_113_03_0",
+      "UT_Hero_Bust_113_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114001,
+    "skinName": "初始皮肤-蓝海晴",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_114",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_0",
+      "UT_Hero_Bust_114_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_114_0_sfw",
+      "UT_Hero_Bust_114_1"
+    ]
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114002,
+    "skinName": "羁绊皮肤-蓝海晴",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_114_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_Max_0",
+      "UT_Hero_Bust_114_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_114_Max_0_sfw",
+      "UT_Hero_Bust_114_Max_1_sfw"
+    ]
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114003,
+    "skinName": "变装派对-蓝海晴",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_114_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_01_0",
+      "UT_Hero_Bust_114_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_114_01_0_sfw",
+      "UT_Hero_Bust_114_01_1_sfw"
+    ]
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114004,
+    "skinName": "列车长-蓝海晴",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 4,
+    "character": "UT_Hero_Card_114_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_02_0",
+      "UT_Hero_Bust_114_02_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_114_02_0_sfw",
+      "UT_Hero_Bust_114_02_1"
+    ]
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114005,
+    "skinName": "优雅身姿-蓝海晴",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_114_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_03_0",
+      "UT_Hero_Bust_114_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 114,
+    "heroName": "蓝海晴",
+    "group": 114,
+    "itemId": 100114006,
+    "skinName": "春日野餐-蓝海晴",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_114_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_114_04_0",
+      "UT_Hero_Bust_114_04_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115001,
+    "skinName": "初始皮肤-美咲",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_115",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_0",
+      "UT_Hero_Bust_115_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115002,
+    "skinName": "羁绊皮肤-美咲",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_115_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_Max_0",
+      "UT_Hero_Bust_115_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115003,
+    "skinName": "战斗女仆-美咲",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_115_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_01_0",
+      "UT_Hero_Bust_115_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115004,
+    "skinName": "真龙御礼-龙崎美咲",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 3,
+    "character": "UT_Hero_Card_115_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_02_0",
+      "UT_Hero_Bust_115_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115005,
+    "skinName": "魔女兵器-美咲",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_115_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_03_0",
+      "UT_Hero_Bust_115_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 115,
+    "heroName": "美咲",
+    "group": 115,
+    "itemId": 100115006,
+    "skinName": "墨韵圆舞-美咲",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_115_04",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_115_04_0",
+      "UT_Hero_Bust_115_04_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 116,
+    "heroName": "娜蒂斯",
+    "group": 116,
+    "itemId": 100116001,
+    "skinName": "初始皮肤-娜蒂斯",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_116",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_116_0",
+      "UT_Hero_Bust_116_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 116,
+    "heroName": "娜蒂斯",
+    "group": 116,
+    "itemId": 100116002,
+    "skinName": "羁绊皮肤-娜蒂斯",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_116_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_116_Max_0",
+      "UT_Hero_Bust_116_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 116,
+    "heroName": "娜蒂斯",
+    "group": 116,
+    "itemId": 100116003,
+    "skinName": "祭典礼服-娜蒂斯",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_116_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_116_01_1",
+      "UT_Hero_Bust_116_01_0"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_116_01_1_sfw",
+      "UT_Hero_Bust_116_01_0_sfw"
+    ]
+  },
+  {
+    "heroId": 116,
+    "heroName": "娜蒂斯",
+    "group": 116,
+    "itemId": 100116004,
+    "skinName": "暮色魔女-娜蒂斯",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_116_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_116_02_0",
+      "UT_Hero_Bust_116_02_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_116_02_0_sfw",
+      "UT_Hero_Bust_116_02_1"
+    ]
+  },
+  {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117001,
+    "skinName": "初始皮肤-茉莉",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_117",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_0",
+      "UT_Hero_Bust_117_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117002,
+    "skinName": "羁绊皮肤-茉莉",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_117_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_Max_0",
+      "UT_Hero_Bust_117_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117003,
+    "skinName": "节日盛装-茉莉",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_117_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_01_0",
+      "UT_Hero_Bust_117_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117004,
+    "skinName": "冲浪海岸-茉莉",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_117_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_02_0",
+      "UT_Hero_Bust_117_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 117,
+    "heroName": "茉莉",
+    "group": 117,
+    "itemId": 100117005,
+    "skinName": "后厨能手-茉莉",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_117_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_117_03_0",
+      "UT_Hero_Bust_117_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 118,
+    "heroName": "阿尔",
+    "group": 118,
+    "itemId": 100118001,
+    "skinName": "初始皮肤-阿尔",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_118",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_118_0",
+      "UT_Hero_Bust_118_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 118,
+    "heroName": "阿尔",
+    "group": 118,
+    "itemId": 100118002,
+    "skinName": "羁绊皮肤-阿尔",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_118_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_118_Max_0",
+      "UT_Hero_Bust_118_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 118,
+    "heroName": "阿尔",
+    "group": 118,
+    "itemId": 100118003,
+    "skinName": "番茄酱魔法-阿尔",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_118_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_118_01_0",
+      "UT_Hero_Bust_118_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 119,
+    "heroName": "星魅琉华",
+    "group": 119,
+    "itemId": 100119001,
+    "skinName": "初始皮肤-琉华",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_119",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_119_0",
+      "UT_Hero_Bust_119_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 119,
+    "heroName": "星魅琉华",
+    "group": 119,
+    "itemId": 100119002,
+    "skinName": "羁绊皮肤-琉华",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_119_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_119_Max_0",
+      "UT_Hero_Bust_119_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 119,
+    "heroName": "星魅琉华",
+    "group": 119,
+    "itemId": 100119003,
+    "skinName": "转角之期-星魅琉华",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_119_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_119_01_0",
+      "UT_Hero_Bust_119_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 119,
+    "heroName": "星魅琉华",
+    "group": 119,
+    "itemId": 100119004,
+    "skinName": "特别礼物-琉华",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_119_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_119_02_0",
+      "UT_Hero_Bust_119_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120001,
+    "skinName": "初始皮肤-南希露",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_120",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_120_0",
+      "UT_Hero_Bust_120_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_120_0_sfw",
+      "UT_Hero_Bust_120_1_sfw"
+    ]
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120002,
+    "skinName": "羁绊皮肤-南希露",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_120_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_120_Max_0",
+      "UT_Hero_Bust_120_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_120_Max_0_sfw",
+      "UT_Hero_Bust_120_Max_1_sfw"
+    ]
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120003,
+    "skinName": "雍容盛景-南希露",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 3,
+    "character": "UT_Hero_Card_120_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_120_01_0",
+      "UT_Hero_Bust_120_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120004,
+    "skinName": "热浪沙滩-南希露",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_120_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_120_02_0",
+      "UT_Hero_Bust_120_02_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_120_02_0_sfw",
+      "UT_Hero_Bust_120_02_1_sfw"
+    ]
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120005,
+    "skinName": "餐前魔法-南希露",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_120_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_120_03_0",
+      "UT_Hero_Bust_120_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 120,
+    "heroName": "南希露",
+    "group": 120,
+    "itemId": 100120006,
+    "skinName": "装备党-南希露",
+    "isDefault": false,
+    "index": 5,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_120_04",
+    "inGameCharacter": "UT_Hero_InGameCard_120_04",
+    "inGameCharacterSfw": "UT_Hero_InGameCard_120_04_sfw",
+    "bust": [
+      "UT_Hero_Bust_120_04_0",
+      "UT_Hero_Bust_120_04_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_120_04_0_sfw",
+      "UT_Hero_Bust_120_04_1_sfw"
+    ]
+  },
+  {
+    "heroId": 121,
+    "heroName": "凛",
+    "group": 121,
+    "itemId": 100121001,
+    "skinName": "初始皮肤-凛",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_121",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_121_0",
+      "UT_Hero_Bust_121_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 121,
+    "heroName": "凛",
+    "group": 121,
+    "itemId": 100121002,
+    "skinName": "羁绊皮肤-凛",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_121_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_121_Max_0",
+      "UT_Hero_Bust_121_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 121,
+    "heroName": "凛",
+    "group": 121,
+    "itemId": 100121003,
+    "skinName": "海湾假日-凛",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_121_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_121_01_0",
+      "UT_Hero_Bust_121_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_121_01_0_sfw",
+      "UT_Hero_Bust_121_01_1_sfw"
+    ]
+  },
+  {
+    "heroId": 121,
+    "heroName": "凛",
+    "group": 121,
+    "itemId": 100121004,
+    "skinName": "冬日暖意-凛",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_121_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_121_02_0",
+      "UT_Hero_Bust_121_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 121,
+    "heroName": "凛",
+    "group": 121,
+    "itemId": 100121005,
+    "skinName": "永恒圣火-凛",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 3,
+    "character": "UT_Hero_Card_121_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_121_03_0",
+      "UT_Hero_Bust_121_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 122,
+    "heroName": "梅加斯",
+    "group": 122,
+    "itemId": 100122001,
+    "skinName": "初始皮肤-梅加斯",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_122",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_122_0",
+      "UT_Hero_Bust_122_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 122,
+    "heroName": "梅加斯",
+    "group": 122,
+    "itemId": 100122002,
+    "skinName": "羁绊皮肤-梅加斯",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_122_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_122_Max_0",
+      "UT_Hero_Bust_122_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 122,
+    "heroName": "梅加斯",
+    "group": 122,
+    "itemId": 100122003,
+    "skinName": "海滨救援-梅加斯",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_122_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_122_01_0",
+      "UT_Hero_Bust_122_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 122,
+    "heroName": "梅加斯",
+    "group": 122,
+    "itemId": 100122004,
+    "skinName": "魔枪表演-梅加斯",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 5,
+    "character": "UT_Hero_Card_122_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_122_02_0",
+      "UT_Hero_Bust_122_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 123,
+    "heroName": "姬梦朝",
+    "group": 123,
+    "itemId": 100123001,
+    "skinName": "初始皮肤-姬梦朝",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_123",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_123_0",
+      "UT_Hero_Bust_123_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_123_0",
+      "UT_Hero_Bust_123_1_sfw"
+    ]
+  },
+  {
+    "heroId": 123,
+    "heroName": "姬梦朝",
+    "group": 123,
+    "itemId": 100123002,
+    "skinName": "羁绊皮肤-姬梦朝",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_123_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_123_Max_0",
+      "UT_Hero_Bust_123_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_123_Max_0",
+      "UT_Hero_Bust_123_Max_1_sfw"
+    ]
+  },
+  {
+    "heroId": 123,
+    "heroName": "姬梦朝",
+    "group": 123,
+    "itemId": 100123003,
+    "skinName": "滨边时光-姬梦朝",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_123_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_123_01_0",
+      "UT_Hero_Bust_123_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_123_01_0_sfw",
+      "UT_Hero_Bust_123_01_1"
+    ]
+  },
+  {
+    "heroId": 123,
+    "heroName": "姬梦朝",
+    "group": 123,
+    "itemId": 100123004,
+    "skinName": "祥瑞天章-姬梦朝",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 3,
+    "character": "UT_Hero_Card_123_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_123_02_0",
+      "UT_Hero_Bust_123_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 124,
+    "heroName": "照",
+    "group": 124,
+    "itemId": 100124001,
+    "skinName": "初始皮肤-照",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_124",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_124_0",
+      "UT_Hero_Bust_124_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 124,
+    "heroName": "照",
+    "group": 124,
+    "itemId": 100124002,
+    "skinName": "羁绊皮肤-照",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_124_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_124_Max_0",
+      "UT_Hero_Bust_124_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 124,
+    "heroName": "照",
+    "group": 124,
+    "itemId": 100124003,
+    "skinName": "小护士-照",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_124_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_124_01_0",
+      "UT_Hero_Bust_124_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 124,
+    "heroName": "照",
+    "group": 124,
+    "itemId": 100124004,
+    "skinName": "魔旅歌姬-照",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 5,
+    "character": "UT_Hero_Card_124_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_124_02_0",
+      "UT_Hero_Bust_124_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 125,
+    "heroName": "摩西",
+    "group": 125,
+    "itemId": 100125001,
+    "skinName": "初始皮肤-摩西",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_125",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_125_0",
+      "UT_Hero_Bust_125_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 125,
+    "heroName": "摩西",
+    "group": 125,
+    "itemId": 100125002,
+    "skinName": "羁绊皮肤-摩西",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_125_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_125_Max_0",
+      "UT_Hero_Bust_125_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 125,
+    "heroName": "摩西",
+    "group": 125,
+    "itemId": 100125003,
+    "skinName": "特殊委派-摩西",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_125_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_125_01_0",
+      "UT_Hero_Bust_125_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 126,
+    "heroName": "真梦梓",
+    "group": 126,
+    "itemId": 100126001,
+    "skinName": "初始皮肤-真梦梓",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_126",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_126_0",
+      "UT_Hero_Bust_126_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 126,
+    "heroName": "真梦梓",
+    "group": 126,
+    "itemId": 100126002,
+    "skinName": "羁绊皮肤-真梦梓",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_126_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_126_Max_0",
+      "UT_Hero_Bust_126_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 126,
+    "heroName": "真梦梓",
+    "group": 126,
+    "itemId": 100126003,
+    "skinName": "冰上舞者-真梦梓",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_126_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_126_01_0",
+      "UT_Hero_Bust_126_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 127,
+    "heroName": "邦妮",
+    "group": 127,
+    "itemId": 100127001,
+    "skinName": "初始皮肤-邦妮",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_127",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_127_0",
+      "UT_Hero_Bust_127_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 127,
+    "heroName": "邦妮",
+    "group": 127,
+    "itemId": 100127002,
+    "skinName": "羁绊皮肤-邦妮",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_127_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_127_Max_0",
+      "UT_Hero_Bust_127_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 127,
+    "heroName": "邦妮",
+    "group": 127,
+    "itemId": 100127003,
+    "skinName": "紧急邀约-邦妮",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_127_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_127_01_0",
+      "UT_Hero_Bust_127_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 127,
+    "heroName": "邦妮",
+    "group": 127,
+    "itemId": 100127004,
+    "skinName": "小红帽-邦妮",
+    "isDefault": false,
+    "index": 3,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_127_02",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_127_02_0",
+      "UT_Hero_Bust_127_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 128,
+    "heroName": "玲玲",
+    "group": 128,
+    "itemId": 100128001,
+    "skinName": "初始皮肤-玲玲",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_128",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_128_0",
+      "UT_Hero_Bust_128_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 128,
+    "heroName": "玲玲",
+    "group": 128,
+    "itemId": 100128002,
+    "skinName": "羁绊皮肤-玲玲",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_128_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_128_Max_0",
+      "UT_Hero_Bust_128_Max_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 128,
+    "heroName": "玲玲",
+    "group": 128,
+    "itemId": 100128003,
+    "skinName": "安全员-玲玲",
+    "isDefault": false,
+    "index": 2,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_128_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_128_01_0",
+      "UT_Hero_Bust_128_01_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_128_01_0_sfw",
+      "UT_Hero_Bust_128_01_1_sfw"
+    ]
+  },
+  {
+    "heroId": 129,
+    "heroName": "赛克斯",
+    "group": 129,
+    "itemId": 100129001,
+    "skinName": "初始皮肤-赛克斯",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_129",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_129_1",
+      "UT_Hero_Bust_129_0"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 129,
+    "heroName": "赛克斯",
+    "group": 129,
+    "itemId": 100129002,
+    "skinName": "羁绊皮肤-赛克斯",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_129_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_129_Max_1",
+      "UT_Hero_Bust_129_Max_0"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_129_Max_1_sfw",
+      "UT_Hero_Bust_129_Max_0"
+    ]
+  },
+  {
+    "heroId": 301,
+    "heroName": "超绝最可爱天使酱",
+    "group": 301,
+    "itemId": 100301001,
+    "skinName": "初始皮肤-超天酱",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_301",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_301_0",
+      "UT_Hero_Bust_301_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 301,
+    "heroName": "超绝最可爱天使酱",
+    "group": 301,
+    "itemId": 100301003,
+    "skinName": "网络主播-超天酱",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 5,
+    "character": "UT_Hero_Card_301_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_301_01_0",
+      "UT_Hero_Bust_301_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 302,
+    "heroName": "主播女孩",
+    "group": 302,
+    "itemId": 100301002,
+    "skinName": "初始皮肤-糖糖",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_302",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_302_0",
+      "UT_Hero_Bust_302_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 302,
+    "heroName": "主播女孩",
+    "group": 302,
+    "itemId": 100301004,
+    "skinName": "休闲日常-糖糖",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 5,
+    "character": "UT_Hero_Card_302_01",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_302_01_0",
+      "UT_Hero_Bust_302_01_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 303,
+    "heroName": "吉尔·斯汀雷",
+    "group": 303,
+    "itemId": 100303001,
+    "skinName": "初始皮肤-吉尔",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_303",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_303_1",
+      "UT_Hero_Bust_303_0"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 304,
+    "heroName": "多萝西·海兹",
+    "group": 304,
+    "itemId": 100304001,
+    "skinName": "初始皮肤-多萝西",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_304",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_304_0",
+      "UT_Hero_Bust_304_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 305,
+    "heroName": "远野汉娜",
+    "group": 305,
+    "itemId": 100305001,
+    "skinName": "初始皮肤-远野汉娜",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_305",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_305_1",
+      "UT_Hero_Bust_305_0"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 306,
+    "heroName": "橘雪莉",
+    "group": 306,
+    "itemId": 100306001,
+    "skinName": "初始皮肤-橘雪莉",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_306",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_306_0",
+      "UT_Hero_Bust_306_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 307,
+    "heroName": "天川苍鲤",
+    "group": 307,
+    "itemId": 100307001,
+    "skinName": "初始皮肤-天川苍鲤",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_307",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_307_0",
+      "UT_Hero_Bust_307_1"
+    ],
+    "bustSfw": []
+  }
+]
