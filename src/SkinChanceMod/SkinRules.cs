@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SkinChanceMod
@@ -5,68 +6,73 @@ namespace SkinChanceMod
     /// <summary>一档阈值：HP 百分比降到 hpPercent 以下时换成 image。</summary>
     public sealed class SkinStage
     {
+        /// <summary>血量百分比上限（0-100）。这一档管「hpPercent 不小于当前血量」的区间。</summary>
         public int hpPercent = 100;
+
+        /// <summary>贴图文件名；写 "0" 表示用游戏原图（不接管）。</summary>
         public string image = "";
+
+        /// <summary>缩放倍数，1 = 和原图一样大。</summary>
+        public float scale = 1f;
+
+        /// <summary>像素偏移（右为正、下为正）。</summary>
+        public float offsetX = 0f;
+        public float offsetY = 0f;
     }
 
     /// <summary>一张皮肤的规则。itemId 即 SkinStandingPaintingConfigureItem.ItemID（见 SKINS.md）。</summary>
     public sealed class SkinRule
     {
         public int itemId;
+
+        /// <summary>贴图所在目录（相对模组目录），由模组从 skins\&lt;文件夹&gt;\config.json 读出来时填。</summary>
+        public string folder = "";
+
         public List<SkinStage> stages = new List<SkinStage>();
+    }
+
+    /// <summary>候选贴图。original 为真时表示用游戏原图，path 无意义。</summary>
+    public sealed class SkinCandidate
+    {
+        public bool original;
+        public string path = "";
+        public float scale = 1f;
+        public float offsetX;
+        public float offsetY;
+
+        /// <summary>用于日志与缓存的名字。</summary>
+        public string Label
+        {
+            get { return original ? "原图" : path; }
+        }
     }
 
     /// <summary>纯逻辑部分，便于离线单测。</summary>
     internal static class SkinRules
     {
-        /// <summary>
-        /// 挑出当前血量百分比对应的贴图；未配置该皮肤、或血量高于所有阈值（还没受伤）时返回 null（保持游戏原图）。
-        /// 语义：一档覆盖「血量 ≤ 它的 hpPercent、且比更低那一档更高」的区间；
-        /// 命中「hpPercent 不小于当前血量」里最低的那一档。不依赖 stages 已排序。
-        /// </summary>
-        public static string Pick(IList<SkinRule> rules, int itemId, int percent)
+        /// <summary>配置里写这个值等于「用游戏原图」。</summary>
+        public const string OriginalName = "0";
+
+        /// <summary>image 是否表示「用游戏原图」。</summary>
+        public static bool IsOriginal(string image)
         {
-            if (rules == null)
+            if (string.IsNullOrEmpty(image))
             {
-                return null;
+                return false;
             }
-            for (int i = 0; i < rules.Count; i++)
-            {
-                SkinRule rule = rules[i];
-                if (rule == null || rule.itemId != itemId)
-                {
-                    continue;
-                }
-                List<SkinStage> stages = rule.stages;
-                if (stages == null || stages.Count == 0)
-                {
-                    return null;
-                }
-                SkinStage hit = null;
-                for (int j = 0; j < stages.Count; j++)
-                {
-                    SkinStage stage = stages[j];
-                    if (stage == null)
-                    {
-                        continue;
-                    }
-                    if (percent <= stage.hpPercent && (hit == null || stage.hpPercent < hit.hpPercent))
-                    {
-                        hit = stage;
-                    }
-                }
-                return hit == null ? null : hit.image;
-            }
-            return null;
+            string value = image.Trim();
+            return string.Equals(value, "0", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(value, "0.png", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
-        /// 按优先级列出该皮肤可用的贴图：先给命中的那一档，再从「更完好」往「更残」补，
-        /// 这样用户只放了一档图（比如只有 full.png）时也能用上。
+        /// 挑出该皮肤当前血量可用的候选：先给命中的那一档，再从「更完好」往「更残」补，
+        /// 这样用户只放了一部分图也能用。未配置该皮肤、或血量还没低到任何一档时返回空表（保持游戏原图）。
+        /// 不依赖 stages 已排序。
         /// </summary>
-        public static List<string> Candidates(IList<SkinRule> rules, int itemId, int percent)
+        public static List<SkinCandidate> Candidates(IList<SkinRule> rules, int itemId, int percent)
         {
-            List<string> result = new List<string>();
+            List<SkinCandidate> result = new List<SkinCandidate>();
             if (rules == null)
             {
                 return result;
@@ -107,18 +113,39 @@ namespace SkinChanceMod
                 }
 
                 // 命中档 -> 往上（更完好）-> 往下（更残）
-                result.Add(ordered[hit].image);
+                Add(result, rule, ordered[hit]);
                 for (int j = hit + 1; j < ordered.Count; j++)
                 {
-                    result.Add(ordered[j].image);
+                    Add(result, rule, ordered[j]);
                 }
                 for (int j = hit - 1; j >= 0; j--)
                 {
-                    result.Add(ordered[j].image);
+                    Add(result, rule, ordered[j]);
                 }
                 return result;
             }
             return result;
+        }
+
+        private static void Add(List<SkinCandidate> result, SkinRule rule, SkinStage stage)
+        {
+            SkinCandidate candidate = new SkinCandidate();
+            candidate.scale = stage.scale <= 0f ? 1f : stage.scale;
+            candidate.offsetX = stage.offsetX;
+            candidate.offsetY = stage.offsetY;
+            if (IsOriginal(stage.image))
+            {
+                candidate.original = true;
+            }
+            else if (!string.IsNullOrEmpty(rule.folder))
+            {
+                candidate.path = rule.folder + "/" + stage.image;
+            }
+            else
+            {
+                candidate.path = stage.image;
+            }
+            result.Add(candidate);
         }
 
         /// <summary>清掉非法档位并按 hpPercent 升序排序，返回是否有改动。</summary>
@@ -149,6 +176,19 @@ namespace SkinChanceMod
                 if (rule.stages.Count != before)
                 {
                     changed = true;
+                }
+                foreach (SkinStage stage in rule.stages)
+                {
+                    if (stage.hpPercent < 0)
+                    {
+                        stage.hpPercent = 0;
+                        changed = true;
+                    }
+                    else if (stage.hpPercent > 100)
+                    {
+                        stage.hpPercent = 100;
+                        changed = true;
+                    }
                 }
                 List<SkinStage> sorted = new List<SkinStage>(rule.stages);
                 sorted.Sort((SkinStage a, SkinStage b) => a.hpPercent.CompareTo(b.hpPercent));

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 namespace SkinChanceMod
 {
     /// <summary>
-    /// 首次启动时写进配置的默认规则：每个皮肤三档（完好 / 受损 / 重伤）。
-    /// 由 tools/gen_skin_defaults.py 从 SKINS.md（3.3.0 数据）生成，共 136 条。
-    /// 用户只要把 PNG 丢进 skins\&lt;文件夹&gt;\ 下对应的文件名即可，缺失的档位会被忽略。
+    /// 皮肤文件夹清单与默认阈值。由 tools/gen_skin_defaults.py 从最新 GameData 生成，共 136 条。
+    /// 模组首次启动会按这份清单建好 skins\&lt;文件夹&gt;\ 并写入各自的 config.json；
+    /// 之后用户只改每个文件夹里的 config.json、往里丢图片即可，不需要重建模组。
     /// </summary>
     internal static class SkinDefaults
     {
@@ -174,23 +174,15 @@ namespace SkinChanceMod
             "1009001001_初始皮肤-天川苍鲤",
         };
 
-        public static List<SkinRule> BuildRules()
+        /// <summary>默认三档：满血保留原图，受损用 1.png，重伤用 2.png。</summary>
+        public static List<SkinStage> DefaultStages()
         {
-            List<SkinRule> rules = new List<SkinRule>(ItemIds.Length);
-            for (int i = 0; i < ItemIds.Length && i < Folders.Length; i++)
+            return new List<SkinStage>
             {
-                string dir = "skins/" + Folders[i] + "/";
-                SkinRule rule = new SkinRule();
-                rule.itemId = ItemIds[i];
-                rule.stages = new List<SkinStage>
-                {
-                    new SkinStage { hpPercent = FullPercent, image = dir + "full.png" },
-                    new SkinStage { hpPercent = DamagedPercent, image = dir + "damaged.png" },
-                    new SkinStage { hpPercent = BrokenPercent, image = dir + "broken.png" },
-                };
-                rules.Add(rule);
-            }
-            return rules;
+                new SkinStage { hpPercent = FullPercent, image = "0", scale = 1f, offsetX = 0f, offsetY = 0f },
+                new SkinStage { hpPercent = DamagedPercent, image = "1.png", scale = 1f, offsetX = 0f, offsetY = 0f },
+                new SkinStage { hpPercent = BrokenPercent, image = "2.png", scale = 1f, offsetX = 0f, offsetY = 0f },
+            };
         }
     }
 }

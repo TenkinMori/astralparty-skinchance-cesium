@@ -4,65 +4,62 @@
 
 - 只影响**自己**的立绘，队友和敌人不受影响。
 - 按**皮肤**（`ItemID`）配置，同一角色穿不同皮肤可以配不同的一套图。
-- 一张图一个档位，血量掉到阈值以下就换下一档；未配置的皮肤完全不动。
-- **全部 136 张皮肤的文件夹和配置都已预置好，你只要把 PNG 丢进去**，不用写 JSON。
+- **每张皮肤一个文件夹，文件夹里有自己的 `config.json`**：阈值、图名、缩放、偏移都在里面改，改完保存就生效。
+- **全部 136 张皮肤的文件夹和 `config.json` 都已预置好，你只要把 PNG 丢进去**。
 
 > 资源名对照表见 [SKINS.md](SKINS.md)：按最新 GameData（3.3.0）抽取，共 38 个角色、136 条皮肤立绘，`皮肤 ItemID` 就是文件夹名前缀。
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.1.0.zip`。
-2. 解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
-3. **把 `skins.zip` 里的 `skins\` 解压到同一个模组目录**（136 个文件夹，每张皮肤一个）。
-4. 启动游戏，选人进局。
+1. 下载 Release 里的 `SkinChanceMod-1.2.0.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
+2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（136 个文件夹，每个文件夹里有一个 `config.json`）。
+3. 启动游戏，选人进局。
 
-> 首次启动会自动把 136 条皮肤规则写进配置，并把贴图文件夹建好（如果 `skins\` 不存在）。所以其实第 3 步也可以跳过：让游戏自己建，再往里丢图。
+> 第 2 步也可以跳过：首次启动会自动建好 136 个文件夹并给每个写一份默认 `config.json`。
 
 ## 使用
 
-**你只要放图，不用改配置。**
-
-每个皮肤一个文件夹，名字是 `<皮肤 ItemID>_<皮肤名>`，里面三个文件名固定：
+**只要放图；要调手感才改 `config.json`。**
 
 ```
 mods\SkinChanceMod\skins\
   100101001_初始皮肤-帕露南\
-    full.png      ← 满血 / 100%
-    damaged.png   ← 掉到 60% 以下
-    broken.png    ← 掉到 25% 以下
+    config.json
+    1.png     ← 受伤
+    2.png     ← 重伤
   100117006_钢羽森姬-茉莉\
-    full.png
-    ...
+    config.json
+    1.png
+    2.png
 ```
 
-- 文件名就是档位，**放哪几张都行**：只放 `broken.png`，那血量 25% 以下才换图，其它时候保持游戏原图。
-- 缺档会自动退化：60% 时只有 `broken.png` 而没有 `damaged.png`，就用 `broken.png`；反之 10% 时只有 `full.png`，就用 `full.png`。优先「更完好」的一档。
-- 想改阈值或者换别的文件名，才需要动配置：
+每个文件夹里的 `config.json`：
 
 ```json
 {
-  "enabled": true,
-  "hideFightVideo": true,
-  "characters": [
-    {
-      "itemId": 100101001,
-      "stages": [
-        { "hpPercent": 100, "image": "skins/100101001_初始皮肤-帕露南/full.png" },
-        { "hpPercent": 60,  "image": "skins/100101001_初始皮肤-帕露南/damaged.png" },
-        { "hpPercent": 25,  "image": "skins/100101001_初始皮肤-帕露南/broken.png" }
-      ]
-    }
+  "itemId": 100117006,
+  "name": "100117006_钢羽森姬-茉莉",
+  "stages": [
+    { "hpPercent": 100, "image": "0",     "scale": 1.0, "offsetX": 0, "offsetY": 0 },
+    { "hpPercent": 60,  "image": "1.png", "scale": 1.0, "offsetX": 0, "offsetY": 0 },
+    { "hpPercent": 25,  "image": "2.png", "scale": 1.0, "offsetX": 0, "offsetY": 0 }
   ]
 }
 ```
 
 | 键 | 类型 | 默认 | 说明 |
 |---|---|---|---|
-| `enabled` | bool | `true` | 总开关，关掉立刻恢复游戏原立绘。 |
-| `hideFightVideo` | bool | `true` | 立绘是视频时强制切静态图并停掉视频，否则接管不到。 |
-| `characters` | array | 全部 136 条（三档） | 每个元素 `{ itemId, stages[] }`，`itemId` 见 SKINS.md。 |
-| `characters[].stages[].hpPercent` | int | 100 / 60 / 25 | 这一档的**血量百分比上限**（1–100）。 |
-| `characters[].stages[].image` | string | `skins/<id_名>/full.png` 等 | PNG 路径，相对模组目录（也可写绝对路径）。 |
+| `itemId` | int | 文件夹名前缀 | 皮肤编号，见 SKINS.md；写 0 时用文件夹名的数字前缀。 |
+| `name` | string | 文件夹名 | 备注，只影响日志。 |
+| `stages[].hpPercent` | int | 100 / 60 / 25 | 这一档管的**血量上限**（0–100）。 |
+| `stages[].image` | string | `"0"` / `"1.png"` / `"2.png"` | 文件名；**写 `"0"` 表示保留游戏原图**；只写 `"1"` 会自动补成 `1.png`；也可写子路径。 |
+| `stages[].scale` | float | `1.0` | 缩放倍数，1 = 原图大小。 |
+| `stages[].offsetX` | float | `0` | 右移像素（负数左移）。 |
+| `stages[].offsetY` | float | `0` | 下移像素（负数上移）。 |
+
+文件名随你起，`image` 写什么就读什么；档位顺序也随便写，模组会自己按 `hpPercent` 排序。
+
+**缺图会自动退化**：某档的图不存在时，先试「更完好」的档，再试「更残」的档。所以最省事的用法是把一张受伤图命名为 `1.png`、一张重伤图命名为 `2.png`。
 
 ### 档位怎么命中
 
@@ -70,25 +67,26 @@ mods\SkinChanceMod\skins\
 
 | 当前血量 | 命中 |
 |---|---|
-| 61%–100% | `full.png` |
-| 26%–60% | `damaged.png` |
-| 0%–25% | `broken.png` |
+| 61%–100% | `image: "0"`（原图） |
+| 26%–60% | `1.png` |
+| 0%–25% | `2.png` |
 
-档位顺序随便写，模组会自己排序。不想要「满血也换图」就把 `hpPercent: 100` 那档删掉，满血时就会保持游戏原图。
+想满血也换图，把第一档的 `image` 改成你自己的文件名即可；想某档不换，就写 `"0"`。
 
 ### 贴图要求
 
 - 只支持 **PNG**（8 bit，非隔行，colorType 0/2/3/4/6），带透明通道没问题。
-- 尺寸随意，会按游戏原本的立绘框缩放（沿用原 loader 的 `fill`/`align`/`customOffset`/`customScale`）。
-- 建议和游戏原图同尺寸（左下角立绘是 `UT_Hero_Card_*`，常见 1261×2048），避免缩放糊掉。
-- 立绘资源名见 SKINS.md 的「左下立绘」列，可以从 `StreamingAssets\aa` 里用 AssetStudio/UnityPy 抽出来改。
+- 尺寸随意，会按游戏原本的立绘框缩放（沿用原 loader 的 `fill`/`align`）；画面对不上就用 `scale` / `offsetX` / `offsetY` 微调。
+- 建议和游戏原图同尺寸（左下角立绘是 `UT_Hero_Card_*`，常见 1261×2048）。
+- 立绘资源名见 SKINS.md 的「左下立绘」列，可从 `StreamingAssets\aa` 里用 AssetStudio/UnityPy 抽出来改。
 - **注意别拿 `UT_Hero_Bust_*`**：那是「发起 PK」弹窗里的小图（`FightWindow.cs:888`），不是左下角立绘。
 
 ## 原理
 
 - 左下角立绘是 `UIBattleInfoPanel.loader_Skin`（`GetChildAt(10)`），实际类型 `UICom_HeroSkin`，里面两个子对象：`loader_Skin_Image`（静态图，`GLoader`）与 `loader_Skin_Video`（视频，`GGraph`）。
 - 游戏唯一的刷新入口是 `BattleInfoPanel.RefreshHeroSkin()` → `CommonUIManager.RendererSkin(...)`，它会直接改 `loader_Skin_Image.url`。**改 url 一定被顶掉**，所以本模组不动它。
-- 做法：在 `UICom_HeroSkin` 里按原图的位置和尺寸加一个自己的 `GLoader`（`SkinChanceOverlay`）盖上去，原 `loader_Skin_Image` 只 `visible = false`。撤掉接管时把 `visible` 还回去。
+- 做法：在 `UICom_HeroSkin` 里按原图的位置和尺寸加一个自己的 `GLoader`（`SkinChanceOverlay`）盖上去，原 `loader_Skin_Image` 只 `visible = false`；撤掉接管时把 `visible` 还回去。
+- 每张皮肤的规则来自 `skins\<文件夹>\config.json`，模组默认每 2 秒按文件时间戳检查一次有没有改动（`reloadSeconds` 可调），改完保存即可，无需重启。
 - 当前皮肤来自 `GameLogicManager.inst.battle.GetSelfPlayerData().player.standingPainting.ItemID`；血量来自 `BattlePlayerData.Property.HP.Value` 与 `Property.maxHP`。
 - 面板通过反射 `UIManager._cachedPanelDict[UIPanelType.BattleInfo]` 取，不会因为轮询而提前构造面板。
 - 贴图解码不依赖 `ImageConversion.LoadImage`（HybridCLR 下不一定能反射到），自带一个纯托管 PNG 解码器（`PngDecoder`），解出 RGBA 后逐行垂直翻转再 `LoadRawTextureData`。
@@ -98,14 +96,16 @@ mods\SkinChanceMod\skins\
 日志前缀 `[SkinChanceMod]`，正常接管时会看到：
 
 ```
+[SkinChanceMod] 已建好 136 个皮肤文件夹：...\mods\SkinChanceMod\skins
+[SkinChanceMod] 已补上 136 份默认 config.json。
 [SkinChanceMod] 战损立绘已加载：共 136 条皮肤规则。
-[SkinChanceMod] 已建好 136 个皮肤贴图文件夹：...\mods\SkinChanceMod\skins
-[SkinChanceMod] 已加载贴图 1261x2048：...\mods\SkinChanceMod\skins\100117006_钢羽森姬-茉莉\full.png
-[SkinChanceMod] 战损立绘已接管：皮肤 100117006 → skins/100117006_钢羽森姬-茉莉/full.png（HP 100%）。
-[SkinChanceMod] 立绘已切换：damaged.png（HP 55%）
+[SkinChanceMod] 已加载贴图 1261x2048：...\skins\100117006_钢羽森姬-茉莉\1.png
+[SkinChanceMod] 立绘已切换：1.png（HP 48%）
+[SkinChanceMod] 立绘已切换：游戏原图（HP 100%）
+[SkinChanceMod] 皮肤配置已更新：共 136 条规则。
 ```
 
-没反应时依次看：`enabled` 是否为 true、日志里那个 `皮肤` 编号有没有对应的文件夹、文件夹里有没有 `full.png`/`damaged.png`/`broken.png`、日志有没有「找不到贴图 / 解码失败」。
+没反应时依次看：`enabled` 是否 true、日志里那个 `皮肤` 编号有没有对应文件夹、`config.json` 里的 `image` 指向的文件在不在、有没有「找不到贴图 / 解码失败 / 读不懂」告警。
 
 ## 构建
 
@@ -115,21 +115,22 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.1.0.zip` 与 `dist\skins.zip`（136 个空文件夹 + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.2.0.zip` 与 `dist\skins.zip`（136 个文件夹，每个含 `config.json` + 使用说明）。
 
-`tools\` 下是可重跑的生成脚本：`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`gen_demo_config.py`（生成全量配置）、`make_skins_zip.py`（打 `skins.zip`）。
+`tools\` 下是可重跑的生成脚本：`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
 ## 本版核对事实
 
 - 游戏 SDK：3.8.7；清单 `sdkVersion` 写 `3.8.1`。
 - 反编译核对：`UIBattleInfoPanel.cs:41/355`、`UICom_HeroSkin.cs`、`BattleInfoPanel.cs:529`、`CommonUIManager.cs:393`、`BattleProperty.cs:22/24`、`GLoader.cs:41/295/505`、`NGraphics.cs:150`。
 - 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（**左下角立绘**，`BattleInfoPanel.RefreshHeroSkin()` 就用它）、字段 15 = `Bust`（PK 弹窗小图，别混），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
-- 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，38 角色 / 136 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**；客户端 Addressables 目录同样已是 `catalog_3.3.0`。
-- 缺档退化：`SkinRules.Candidates` 命中档 → 更完好 → 更残，离线单测 39 项全过（`_skintest`）。
+- 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，38 角色 / 136 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**。
+- 缺档退化：`SkinRules.Candidates` 命中档 → 更完好 → 更残；离线单测 202 项全过（`_skintest`，覆盖规则、原图判定、目录读取、默认值与越界夹取）。
 
 ## 更新日志
 
-- **1.1.0**：默认配置展开全部 136 张皮肤（三档 100/60/25），启动时自动建好 `skins\<ItemID>_<皮肤名>\` 文件夹，并随 Release 提供 `skins.zip`；缺图时按「更完好 → 更残」退化，用户只要放图即可用。
+- **1.2.0**：改成**每张皮肤一个 `config.json`**（`skins\<ItemID>_<皮肤名>\config.json`）；支持 `image: "0"` 表示原图、只写数字自动补 `.png`、每档独立的 `scale`/`offsetX`/`offsetY`；模组每 2 秒按文件时间戳热重载各皮肤配置（`reloadSeconds` 可调）；模组根配置只剩 `enabled`/`hideFightVideo`/`reloadSeconds` 三个开关。
+- **1.1.0**：默认配置展开全部 136 张皮肤（三档 100/60/25），启动时自动建好 `skins\<ItemID>_<皮肤名>\` 文件夹，并随 Release 提供 `skins.zip`；缺图时按「更完好 → 更残」退化。
 - **1.0.1**：`SKINS.md` / `skins.json` 改用 3.3.0 数据重新抽取（36→38 角色、131→136 条皮肤，补上 `100117006 钢羽森姬-茉莉` 等）；模组代码无改动。
 - **1.0.0**：首个版本，按 HP 百分比切换局内左下角自己的立绘。
 
@@ -139,6 +140,7 @@ mods\SkinChanceMod\skins\
 - 立绘是视频且 `hideFightVideo=false` 时接管不到（视频是 `GGraph` 播放，不是贴图）。
 - 游戏重设 `loader_Skin_Image.url` 时不会打断接管，但如果立绘整体重建（换人、重开一局），下一轮轮询会重新接管。
 - 只支持 PNG；WebP/JPG 需要自己转。
+- `config.json` 用的是普通 JSON，注释不支持（SDK 的解析器不认 `//`）。
 
 ## 许可
 

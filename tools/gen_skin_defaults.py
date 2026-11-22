@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-"""从 skins.json 生成 SkinDefaults.cs，并在游戏 mods 目录里建好每个皮肤的贴图文件夹。
+"""从 skins.json 生成 SkinDefaults.cs（皮肤文件夹名清单 + 默认阈值）。
 
-用法：python _genskindefaults.py
+用法：python tools/gen_skin_defaults.py
+
+生成内容只包含「哪些皮肤、文件夹叫什么名字、默认三档阈值多少」，
+每个皮肤的具体配置由模组首次启动时写进各自文件夹的 config.json，
+用户改那个文件即可，不需要重建模组。
 """
 import json
 import os
 import re
-import shutil
 
-REPO = r"D:\AstralPartyGit\astralparty-skinchance-cesium"
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_JSON = os.path.join(REPO, "skins.json")
 OUT_CS = os.path.join(REPO, "src", "SkinChanceMod", "SkinDefaults.cs")
-MOD_DIR = r"D:\Steam\steamapps\common\Astral Party\8vJXn6CN\AstralParty_ModLoader\mods\SkinChanceMod"
-SKINS_DIR = os.path.join(MOD_DIR, "skins")
 
-STAGES = [(100, "full.png"), (60, "damaged.png"), (25, "broken.png")]
+STAGES = [(100, "0"), (60, "1.png"), (25, "2.png")]
 
 
 def safe(name):
@@ -44,9 +45,9 @@ def main():
         "namespace SkinChanceMod",
         "{",
         "    /// <summary>",
-        "    /// 首次启动时写进配置的默认规则：每个皮肤三档（完好 / 受损 / 重伤）。",
-        "    /// 由 tools/gen_skin_defaults.py 从 SKINS.md（3.3.0 数据）生成，共 %d 条。" % len(ids),
-        "    /// 用户只要把 PNG 丢进 skins\\&lt;文件夹&gt;\\ 下对应的文件名即可，缺失的档位会被忽略。",
+        "    /// 皮肤文件夹清单与默认阈值。由 tools/gen_skin_defaults.py 从最新 GameData 生成，共 %d 条。" % len(ids),
+        "    /// 模组首次启动会按这份清单建好 skins\\&lt;文件夹&gt;\\ 并写入各自的 config.json；",
+        "    /// 之后用户只改每个文件夹里的 config.json、往里丢图片即可，不需要重建模组。",
         "    /// </summary>",
         "    internal static class SkinDefaults",
         "    {",
@@ -70,23 +71,15 @@ def main():
     lines += [
         "        };",
         "",
-        "        public static List<SkinRule> BuildRules()",
+        "        /// <summary>默认三档：满血保留原图，受损用 1.png，重伤用 2.png。</summary>",
+        "        public static List<SkinStage> DefaultStages()",
         "        {",
-        "            List<SkinRule> rules = new List<SkinRule>(ItemIds.Length);",
-        "            for (int i = 0; i < ItemIds.Length && i < Folders.Length; i++)",
+        "            return new List<SkinStage>",
         "            {",
-        '                string dir = "skins/" + Folders[i] + "/";',
-        "                SkinRule rule = new SkinRule();",
-        "                rule.itemId = ItemIds[i];",
-        "                rule.stages = new List<SkinStage>",
-        "                {",
-        '                    new SkinStage { hpPercent = FullPercent, image = dir + "full.png" },',
-        '                    new SkinStage { hpPercent = DamagedPercent, image = dir + "damaged.png" },',
-        '                    new SkinStage { hpPercent = BrokenPercent, image = dir + "broken.png" },',
-        "                };",
-        "                rules.Add(rule);",
-        "            }",
-        "            return rules;",
+        '                new SkinStage { hpPercent = FullPercent, image = "0", scale = 1f, offsetX = 0f, offsetY = 0f },',
+        '                new SkinStage { hpPercent = DamagedPercent, image = "1.png", scale = 1f, offsetX = 0f, offsetY = 0f },',
+        '                new SkinStage { hpPercent = BrokenPercent, image = "2.png", scale = 1f, offsetX = 0f, offsetY = 0f },',
+        "            };",
         "        }",
         "    }",
         "}",
@@ -95,16 +88,6 @@ def main():
     with open(OUT_CS, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(lines))
     print("SkinDefaults.cs wrote, skins=%d" % len(ids))
-
-    os.makedirs(SKINS_DIR, exist_ok=True)
-    created = 0
-    for f in folders:
-        p = os.path.join(SKINS_DIR, f)
-        if not os.path.isdir(p):
-            os.makedirs(p)
-            created += 1
-    print("folders created=%d total=%d" % (created, len(folders)))
-    print("mod skins dir:", SKINS_DIR)
 
 
 main()
