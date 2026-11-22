@@ -102,6 +102,12 @@ namespace SkinChanceMod
         private bool _ready;
         private int _preloadedItem;
 
+        /// <summary>本局游戏实际使用的立绘资源名（`UT_Hero_Card_117_04` 这种），Offsets 表按它建键。</summary>
+        private string _paintingName;
+
+        /// <summary>已经打过「Offsets 兜底」日志的资源名，避免每次重排都刷一条。</summary>
+        private string _loggedFallback;
+
         /// <summary>接管前的立绘类型（0 静态 / 1 视频），撤掉时还原。</summary>
         private int _savedTypeIndex = -1;
         private bool _videoHidden;
@@ -113,7 +119,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.2.2"; }
+            get { return "1.2.3"; }
         }
 
         public override string Author
@@ -261,6 +267,10 @@ namespace SkinChanceMod
                 return;
             }
 
+            // 游戏自己的立绘资源名（Skin.bin 的 Character / InGameCharacter），
+            // Offsets 表就是按这个名字建的键，兜底几何必须用它而不是我们的 1.png。
+            _paintingName = ResolvePaintingName(self);
+
             int maxHp = self.Property.maxHP;
             if (maxHp <= 0)
             {
@@ -322,6 +332,28 @@ namespace SkinChanceMod
                 // ignore
             }
             return 0;
+        }
+
+        /// <summary>
+        /// 局内左下角实际用的立绘资源名（`Skin.bin` 的 `Character`，angelMode 下取 `SfwCharacter`）。
+        /// Offsets 表按这个名字建键，兜底几何与日志都用它。
+        /// </summary>
+        private static string ResolvePaintingName(BattlePlayerData data)
+        {
+            try
+            {
+                SkinStandingPaintingConfigureItem painting = data.player.standingPainting;
+                if (painting == null)
+                {
+                    return null;
+                }
+                (string, bool) characterInGame = painting.GetCharacterInGame();
+                return string.IsNullOrEmpty(characterInGame.Item1) ? null : characterInGame.Item1;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private BattleInfoPanel FindBattleInfoPanel()
@@ -527,14 +559,20 @@ namespace SkinChanceMod
                 Vector2 baseOffset = source.customOffset;
                 // 原 loader 还没被游戏设过几何时（customOffset 为零且 customScale 为单位），
                 // 用 Offsets 表兜底算出半身偏移与缩放，否则会把全身图整张铺上去。
+                // 表的键是游戏自己的资源名（UT_Hero_Card_117_04），不是我们的 1.png。
                 if (baseOffset == Vector2.zero && baseScale == Vector2.one && candidate != null && !candidate.original)
                 {
                     Vector2 fallbackOffset;
                     Vector2 fallbackScale;
-                    if (TryFallbackGeometry(Path.GetFileNameWithoutExtension(candidate.path), out fallbackOffset, out fallbackScale))
+                    if (TryFallbackGeometry(_paintingName, out fallbackOffset, out fallbackScale))
                     {
                         baseOffset = fallbackOffset;
                         baseScale = fallbackScale;
+                        if (_loggedFallback != _paintingName)
+                        {
+                            _loggedFallback = _paintingName;
+                            Log.Info("用 Offsets 表兜底半身取景：" + _paintingName + "，偏移 " + fallbackOffset.x.ToString("0.#") + "," + fallbackOffset.y.ToString("0.#") + "，缩放 " + fallbackScale.y.ToString("0.##"));
+                        }
                     }
                 }
                 float ox = baseOffset.x + userX;
