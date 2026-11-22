@@ -60,6 +60,67 @@ namespace SkinChanceMod
             return null;
         }
 
+        /// <summary>
+        /// 按优先级列出该皮肤可用的贴图：先给命中的那一档，再从「更完好」往「更残」补，
+        /// 这样用户只放了一档图（比如只有 full.png）时也能用上。
+        /// </summary>
+        public static List<string> Candidates(IList<SkinRule> rules, int itemId, int percent)
+        {
+            List<string> result = new List<string>();
+            if (rules == null)
+            {
+                return result;
+            }
+            for (int i = 0; i < rules.Count; i++)
+            {
+                SkinRule rule = rules[i];
+                if (rule == null || rule.itemId != itemId)
+                {
+                    continue;
+                }
+                List<SkinStage> stages = rule.stages;
+                if (stages == null || stages.Count == 0)
+                {
+                    return result;
+                }
+
+                List<SkinStage> ordered = new List<SkinStage>(stages);
+                ordered.RemoveAll((SkinStage stage) => stage == null || string.IsNullOrEmpty(stage.image));
+                if (ordered.Count == 0)
+                {
+                    return result;
+                }
+                ordered.Sort((SkinStage a, SkinStage b) => a.hpPercent.CompareTo(b.hpPercent));
+
+                int hit = -1;
+                for (int j = 0; j < ordered.Count; j++)
+                {
+                    if (percent <= ordered[j].hpPercent)
+                    {
+                        hit = j;
+                        break;
+                    }
+                }
+                if (hit < 0)
+                {
+                    return result;
+                }
+
+                // 命中档 -> 往上（更完好）-> 往下（更残）
+                result.Add(ordered[hit].image);
+                for (int j = hit + 1; j < ordered.Count; j++)
+                {
+                    result.Add(ordered[j].image);
+                }
+                for (int j = hit - 1; j >= 0; j--)
+                {
+                    result.Add(ordered[j].image);
+                }
+                return result;
+            }
+            return result;
+        }
+
         /// <summary>清掉非法档位并按 hpPercent 升序排序，返回是否有改动。</summary>
         public static bool Normalize(List<SkinRule> rules)
         {

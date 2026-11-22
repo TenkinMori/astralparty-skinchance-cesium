@@ -1,9 +1,9 @@
 {
   "id": "SkinChanceMod",
   "name": "战损立绘",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "TenkinMori",
-  "description": "按血量百分比切换局内左下角自己的角色立绘，做成战损效果；贴图与阈值写在配置里，可随时热重载。",
+  "description": "按血量百分比切换局内左下角自己的角色立绘，做成战损效果；全部皮肤与文件夹已预置好，只要把 PNG 放进 skins\\<皮肤>\\ 就能用。",
   "permissions": 273,
   "sdkVersion": "3.8.1",
   "dependencies": []

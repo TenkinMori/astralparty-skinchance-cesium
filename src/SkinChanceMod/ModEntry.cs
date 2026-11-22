@@ -65,7 +65,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.0.1"; }
+            get { return "1.1.0"; }
         }
 
         public override string Author
@@ -81,6 +81,7 @@ namespace SkinChanceMod
         public override void OnInitialize()
         {
             ReadConfig(true);
+            EnsureSkinFolders();
             Log.Info("战损立绘已加载：共 " + _rules.Count + " 条皮肤规则。");
         }
 
@@ -217,19 +218,19 @@ namespace SkinChanceMod
             }
             int percent = (int)Math.Floor(hp * 100.0 / maxHp);
 
-            string image = PickImage(itemId, percent);
-            if (image == null)
+            List<string> candidates = PickImages(itemId, percent);
+            if (candidates.Count == 0)
             {
                 Restore();
                 return;
             }
 
-            Apply(skin, image, percent);
+            Apply(skin, candidates, percent);
 
             if (!_ready)
             {
                 _ready = true;
-                Log.Info("战损立绘已接管：皮肤 " + itemId + " → " + image + "（HP " + percent + "%）。");
+                Log.Info("战损立绘已接管：皮肤 " + itemId + " → " + _appliedImage + "（HP " + percent + "%）。");
             }
         }
 
@@ -304,7 +305,7 @@ namespace SkinChanceMod
 
         // ---------------- 贴图接管 ----------------
 
-        private void Apply(UICom_HeroSkin skin, string image, int percent)
+        private void Apply(UICom_HeroSkin skin, List<string> candidates, int percent)
         {
             GLoader source = skin.loader_Skin_Image;
             if (source == null)
@@ -317,16 +318,39 @@ namespace SkinChanceMod
                 Restore();
             }
 
-            EnsureOverlay(skin, source);
-
-            string key = _appliedKey != null && _appliedImage == image ? _appliedKey : image;
-            NTexture texture = GetTexture(image);
-            if (texture == null)
+            // 命中档优先，缺图就按「更完好 → 更残」退化，用户只放一档图也能用
+            NTexture texture = null;
+            string image = null;
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                string candidate = candidates[i];
+                if (string.IsNullOrEmpty(candidate))
+                {
+                    continue;
+                }
+                if (_appliedImage == candidate && _appliedSource == source && _overlay != null && _overlay.texture != null)
+                {
+                    image = candidate;
+                    texture = _overlay.texture;
+                    break;
+                }
+                NTexture loaded = GetTexture(candidate);
+                if (loaded != null)
+                {
+                    image = candidate;
+                    texture = loaded;
+                    break;
+                }
+            }
+            if (texture == null || image == null)
             {
                 Restore();
                 return;
             }
 
+            EnsureOverlay(skin, source);
+
+            string key = _appliedKey != null && _appliedImage == image ? _appliedKey : image;
             if (_overlay.texture != texture)
             {
                 // 先设偏移再贴图：GLoader 在 UpdateLayout 末尾应用 customOffset/customScale
@@ -631,11 +655,11 @@ namespace SkinChanceMod
                 "立繪是影片時是否強制切成靜態圖並停掉影片（否則接管不到）。",
                 "Force static art and stop the video when the skin uses a movie.",
                 "立ち絵が動画の場合に静止画へ切り替えて動画を止める。"));
-            changed |= cfg.SetDefault("characters", new List<SkinRule>(), ConfigDoc.Of(
-                "按皮肤配置阈值与贴图：itemId 见 SKINS.md，stages 的 hpPercent 是血量百分比上限（从小到大命中第一档），image 是相对模组目录的路径。",
-                "依皮膚設定閾值與貼圖：itemId 見 SKINS.md，stages 的 hpPercent 是血量百分比上限（由小到大命中第一檔），image 是相對模組目錄的路徑。",
-                "Rules per skin: itemId from SKINS.md; stage.hpPercent is the HP%% upper bound (first match from low to high); image is relative to the mod folder.",
-                "スキンごとの設定：itemId は SKINS.md 参照、hpPercent は HP%% の上限（小さい順に最初の一致）、image は MOD フォルダー相対パス。"));
+            changed |= cfg.SetDefault("characters", SkinDefaults.BuildRules(), ConfigDoc.Of(
+                "按皮肤配置阈值与贴图：itemId 见 SKINS.md，stages 的 hpPercent 是血量百分比上限（从小到大命中第一档），image 是相对模组目录的路径。第一次启动会自动展开全部皮肤，你只要把同名 PNG 放进 skins\\<itemId_皮肤名>\\ 即可，缺哪张就用相邻档位顶替。",
+                "依皮膚設定閾值與貼圖：itemId 見 SKINS.md，stages 的 hpPercent 是血量百分比上限（由小到大命中第一檔），image 是相對模組目錄的路徑。第一次啟動會自動展開全部皮膚，你只要把同名 PNG 放進 skins\\<itemId_皮膚名>\\ 即可，缺哪張就用相鄰檔位頂替。",
+                "Rules per skin: itemId from SKINS.md; stage.hpPercent is the HP%% upper bound (first match from low to high); image is relative to the mod folder. The first launch expands every skin; just drop same-named PNGs into skins\\<itemId_name>\\ and missing stages fall back to a neighbour.",
+                "スキンごとの設定：itemId は SKINS.md 参照、hpPercent は HP%% の上限（小さい順に最初の一致）、image は MOD フォルダー相対パス。初回起動で全スキンを展開します。同名の PNG を skins\\<itemId_名前>\\ に入れるだけで、無い段階は隣の段階で代用します。"));
             if (changed || firstLoad)
             {
                 cfg.SaveIfDirty();
@@ -666,10 +690,48 @@ namespace SkinChanceMod
             _nextPoll = 0;
         }
 
-        /// <summary>取命中档位对应的贴图；未配置该皮肤时返回 null。</summary>
-        private string PickImage(int itemId, int percent)
+        /// <summary>按优先序列出该皮肤可用的贴图；未配置该皮肤时返回空表。</summary>
+        private List<string> PickImages(int itemId, int percent)
         {
-            return SkinRules.Pick(_rules, itemId, percent);
+            return SkinRules.Candidates(_rules, itemId, percent);
+        }
+
+        /// <summary>
+        /// 把每个皮肤的贴图文件夹建出来，用户只要往里丢 full.png / damaged.png / broken.png。
+        /// 已经存在就跳过，不动用户放进去的图。
+        /// </summary>
+        private void EnsureSkinFolders()
+        {
+            try
+            {
+                string root = SdkPath.CurrentModDirectory;
+                if (string.IsNullOrEmpty(root))
+                {
+                    Warn("拿不到模组目录，跳过贴图文件夹预建。");
+                    return;
+                }
+
+                string baseDir = Path.Combine(root, DefaultFolder);
+                Directory.CreateDirectory(baseDir);
+                int created = 0;
+                for (int i = 0; i < SkinDefaults.Folders.Length; i++)
+                {
+                    string dir = Path.Combine(baseDir, SkinDefaults.Folders[i]);
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                        created++;
+                    }
+                }
+                if (created > 0)
+                {
+                    Log.Info("已建好 " + created + " 个皮肤贴图文件夹：" + baseDir);
+                }
+            }
+            catch (Exception ex)
+            {
+                Warn("预建贴图文件夹失败：" + ex.Message);
+            }
         }
 
         private void Warn(string message)
