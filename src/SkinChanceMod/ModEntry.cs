@@ -143,7 +143,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.3.1"; }
+            get { return "1.3.2"; }
         }
 
         public override string Author
@@ -1441,6 +1441,8 @@ namespace SkinChanceMod
                 + _edit.scale.ToString("0.00") + "，偏移 " + _edit.offsetX.ToString("0") + "," + _edit.offsetY.ToString("0") + "）。");
             // 让热重载下一轮能察觉（时间戳已变），同时立刻刷一次指纹避免重复读
             _lastCatalogSignature = null;
+            // 保存成功就收工：直接退出编辑器，把立绘交还给游戏
+            CloseEditor();
         }
 
         /// <summary>恢复该档到默认缩放/偏移（1 倍、零偏移），要按保存才落盘。</summary>

@@ -14,7 +14,7 @@
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.3.1.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
+1. 下载 Release 里的 `SkinChanceMod-1.3.2.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
 2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（135 个文件夹，每个文件夹里有一个 `config.json`）。
 3. 启动游戏，选人进局。
 
@@ -142,7 +142,7 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.1.zip` 与 `dist\skins.zip`（135 个文件夹，每个含 `config.json` + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.2.zip` 与 `dist\skins.zip`（135 个文件夹，每个含 `config.json` + 使用说明）。
 
 `tools\` 下是可重跑的生成脚本：`gen_skins_catalog.py`（从 GameData 生成 `SKINS.md` / `skins.json`）、`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
@@ -159,6 +159,7 @@ mods\SkinChanceMod\skins\
 
 ## 更新日志
 
+- **1.3.2**：①编辑器**保存成功后直接关闭**（写完 `config.json` 就退出编辑态，把立绘交还游戏，不用再手点关闭）；②编辑器**排版改为按文字实际高度自上而下流式排列**（`GTextField.autoSize = AutoSizeType.Height` + `textHeight` 递归布局，最后按总高度重画底板），标题/说明行变长时面板自己长高，按钮不会再被挤到面板外面；面板加宽到 460。
 - **1.3.1**：①修编辑器**拖动立绘收不到事件**的问题 —— 游戏在 `BattleInfoPanel.InitTouchable()` 里把 `loader_Skin.touchableAll = false`，而 FairyGUI 的 `DisplayObject.InternalHitTest()` 是「父级不可触摸就不下探子对象」，所以只把覆盖层设成 `touchable` 没用；现在打开编辑器时临时把宿主 `UICom_HeroSkin` 的 `touchable` 放开，关闭时再还原。②对照表重抽并排除 DIY 角色 `9001 天川苍鲤`（立绘复用 `UT_Hero_Card_307`，不是正式皮肤），135 条；`307`/`308` 保留。③新增「当前皮肤」日志（`当前皮肤：ItemID …（立绘 …），规则 … 条里命中 … 档候选` / `当前皮肤未配置（ItemID …）`），换皮肤就能直接从日志看出摸到了哪张皮、有没有对应文件夹。
 - **1.3.0**：①修 `image: "0.png"` 被判成「游戏原图」的 bug（现在只认裸 `"0"`）；②新增局内**立绘编辑器** —— 默认 **F12** 打开，在立绘上拖动改位置、按住 Ctrl 拖动改缩放、也可用按钮微调，点「保存到配置」直接写回该皮肤的 `config.json`，点「恢复默认」回到 1 倍无偏移；③模组根配置新增 `editKey`（默认 `"F12"`，写 `None` 停用）。
 - **1.2.4**：换新图标；新增 [使用说明.md](使用说明.md)（面向使用者的完整手册：安装、找皮肤编号、`config.json` 逐键说明、档位命中区间、缺图退化、缩放偏移调法、常见配方、排查表），并随 Release 包分发。代码无行为改动。
