@@ -25,6 +25,11 @@
       <HintPath>..\..\refs\game\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <!-- 引擎自带的图片解码器（ImageConversion.LoadImage）：覆盖 JPG/WEBP/GIF 等托管解不了的格式 -->
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\refs\game\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

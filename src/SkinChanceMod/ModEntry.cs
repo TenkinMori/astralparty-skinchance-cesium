@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -55,9 +55,17 @@ namespace SkinChanceMod
             public string Path;
             public volatile bool Ready;
             public bool Failed;
+
+            /// <summary>纯托管解码成功时的像素（自上而下，NGRA 顺序）。</summary>
             public int Width;
             public int Height;
             public byte[] Rgba;
+
+            /// <summary>托管解不了的格式（JPG/WEBP/GIF/…）留原始字节，交给主线程用引擎解码。</summary>
+            public byte[] Raw;
+
+            /// <summary>格式名，只用于日志与报错。</summary>
+            public string Format;
         }
 
         private bool _enabled = true;
@@ -143,7 +151,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.3.2"; }
+            get { return "1.3.3"; }
         }
 
         public override string Author
@@ -898,19 +906,22 @@ namespace SkinChanceMod
                 try
                 {
                     byte[] data = File.ReadAllBytes(path);
+                    job.Format = ImageDecoder.Describe(data);
+
+                    // 后台线程不能碰 Unity API：PNG/BMP/TGA 走纯托管，其余格式留原始字节给主线程
                     int width;
                     int height;
                     byte[] rgba;
-                    if (!PngDecoder.TryDecode(data, out width, out height, out rgba))
-                    {
-                        job.Failed = true;
-                    }
-                    else
+                    if (ImageDecoder.TryDecodeManaged(data, out width, out height, out rgba))
                     {
                         FlipRows(rgba, width, height);
                         job.Width = width;
                         job.Height = height;
                         job.Rgba = rgba;
+                    }
+                    else
+                    {
+                        job.Raw = data;
                     }
                 }
                 catch
@@ -957,13 +968,23 @@ namespace SkinChanceMod
             for (int i = 0; i < _finished.Count; i++)
             {
                 TextureJob job = _finished[i];
-                if (job.Failed || job.Rgba == null)
+                if (job.Failed)
                 {
-                    Warn("解码失败：" + job.Path);
+                    Warn("读取失败：" + job.Path);
                     _failedAt[job.Key] = Now();
                     continue;
                 }
-                Texture2D texture = CreateTexture(job.Width, job.Height, job.Rgba);
+
+                Texture2D texture;
+                if (job.Rgba != null)
+                {
+                    texture = CreateTexture(job.Width, job.Height, job.Rgba);
+                }
+                else
+                {
+                    // 托管解不了的格式交给引擎（ImageConversion.LoadImage，底层 stb + 平台解码器）
+                    texture = LoadWithEngine(job.Raw, job.Format, job.Path);
+                }
                 if (texture == null)
                 {
                     _failedAt[job.Key] = Now();
@@ -971,9 +992,42 @@ namespace SkinChanceMod
                 }
                 _nTextures[job.Key] = new NTexture(texture);
                 _failedAt.Remove(job.Key);
-                Log.Info("已加载贴图 " + job.Width + "x" + job.Height + "：" + job.Path);
+                Log.Info("已加载贴图 " + texture.width + "x" + texture.height + "（" + job.Format + "）：" + job.Path);
             }
             _finished.Clear();
+        }
+
+        /// <summary>
+        /// 用引擎解码任意 Unity 支持的格式（JPG/PNG/GIF/BMP/TGA/PSD/EXR/HDR/…，具体看平台解码器）。
+        /// ImageConversion.LoadImage 必须在主线程。
+        /// </summary>
+        private Texture2D LoadWithEngine(byte[] data, string format, string path)
+        {
+            if (data == null || data.Length == 0)
+            {
+                Warn("解码失败（空文件）：" + path);
+                return null;
+            }
+            try
+            {
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                if (!ImageConversion.LoadImage(texture, data, false))
+                {
+                    UnityEngine.Object.Destroy(texture);
+                    Warn("引擎不支持这种图片格式（" + format + "）：" + path
+                        + "　建议转成 PNG 或 JPG 再用。");
+                    return null;
+                }
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.filterMode = FilterMode.Bilinear;
+                texture.Apply(false, false);
+                return texture;
+            }
+            catch (Exception ex)
+            {
+                Warn("引擎解码异常（" + format + "）：" + path + " — " + ex.Message);
+                return null;
+            }
         }
 
         private static Texture2D CreateTexture(int width, int height, byte[] rgba)
