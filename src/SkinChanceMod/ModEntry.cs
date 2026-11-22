@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -119,7 +119,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.2.3"; }
+            get { return "1.2.4"; }
         }
 
         public override string Author

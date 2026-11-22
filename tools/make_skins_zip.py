@@ -55,6 +55,8 @@ def write_config(zf, folder, item_id):
 
 README = """把这里的东西整个解压到 mods\\SkinChanceMod\\ 下（覆盖 skins\\ 即可）。
 
+完整用法见模组目录里的「使用说明.md」，这里只列最要紧的。
+
 每个文件夹 = 一张皮肤，名字是 <皮肤编号>_<皮肤名>，编号见 SKINS.md。
 文件夹里有一个 config.json，直接改它就行：
 

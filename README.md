@@ -8,10 +8,12 @@
 - **全部 136 张皮肤的文件夹和 `config.json` 都已预置好，你只要把 PNG 丢进去**。
 
 > 资源名对照表见 [SKINS.md](SKINS.md)：按最新 GameData（3.3.0）抽取，共 38 个角色、136 条皮肤立绘，`皮肤 ItemID` 就是文件夹名前缀。
+>
+> **只想会用、不想看原理** → 看 [使用说明.md](使用说明.md)（装在哪、怎么放图、`config.json` 每个键什么意思、常见配方、排查表）。
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.2.3.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
+1. 下载 Release 里的 `SkinChanceMod-1.2.4.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
 2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（136 个文件夹，每个文件夹里有一个 `config.json`）。
 3. 启动游戏，选人进局。
 
@@ -117,7 +119,7 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.2.3.zip` 与 `dist\skins.zip`（136 个文件夹，每个含 `config.json` + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.2.4.zip` 与 `dist\skins.zip`（136 个文件夹，每个含 `config.json` + 使用说明）。
 
 `tools\` 下是可重跑的生成脚本：`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
@@ -132,6 +134,7 @@ mods\SkinChanceMod\skins\
 
 ## 更新日志
 
+- **1.2.4**：换新图标；新增 [使用说明.md](使用说明.md)（面向使用者的完整手册：安装、找皮肤编号、`config.json` 逐键说明、档位命中区间、缺图退化、缩放偏移调法、常见配方、排查表），并随 Release 包分发。代码无行为改动。
 - **1.2.3**：修 1.2.2 里兜底取景**根本没生效**的问题 —— 兜底要用游戏自己的资源名（`UT_Hero_Card_117_04`，取自 `standingPainting.GetCharacterInGame()`）去查 `heroSkinOffsetDict`，之前误用了我们自己的文件名（`1.png` → `"1"`），永远匹配不上，所以「半身」还是没对上。现在按本局真实资源名兜底，并在日志里打印用到的偏移/缩放。
 - **1.2.2**：修「立绘尺寸不对、不是半身」——根因是 `GLoader.UpdateLayout()` 才是真正应用 `customOffset`/`customScale` 的地方（只在设 `url`/`texture`/尺寸时跑），原来先赋贴图后写偏移，偏移永远不生效，等于把 1261×2048 的全身图整张铺上去。现在改为先铺几何再给贴图，并在几何变化后主动重排一次；原 loader 尚未被游戏设过几何时，用游戏自己的 `Skin.bin` Offsets 表（`heroSkinOffsetDict`，`CharacterStateSkinOffsetX/Y` + `CharacterStateSkinScale`）兜底，和原版半身取景一致。
 - **1.2.1**：修两处体验问题 —— ①切档时不再卡一下：贴图解码挪到后台线程、进对局提前预解码该皮肤全部档位、几何无变化时不碰 FairyGUI（原来每 0.2 秒重设一次尺寸/偏移会导致合批重建）；②不再被拉扁：覆盖层的 `fill`/`align`/`verticalAlign`/`shrinkOnly` 改为照抄原 `loader_Skin_Image`，并把原 loader 的 `customOffset`/`customScale` 当基准再叠加配置值。另外缺图/解码失败改为每 5 秒重试，中途补图也能生效。
