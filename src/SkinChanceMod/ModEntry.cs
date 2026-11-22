@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using CesiumLoader.SDK;
 using CesiumLoader.SDK.Configuration;
 using CesiumLoader.SDK.Mods;
@@ -29,6 +30,7 @@ namespace SkinChanceMod
     /// image 写 "0" 表示这一档保留游戏原图。
     /// 做法是不动游戏自己的 loader：在 UICom_HeroSkin 里插一个自己的 GLoader 盖住原图，
     /// 原 loader 只隐藏不改 url —— 游戏侧 RefreshHeroSkin() 会重设 url/布局，改 url 必被顶掉。
+    /// 贴图解码在后台线程做，主线程只负责上传，切档时不会读盘/解压卡一帧。
     /// </summary>
     public sealed class SkinChanceController : ModBase
     {
@@ -38,23 +40,67 @@ namespace SkinChanceMod
         private static readonly FieldInfo PanelDictField =
             typeof(UIManager).GetField("_cachedPanelDict", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        /// <summary>
+        /// GLoader.UpdateLayout 是 protected：customOffset/customScale 只在这个方法里生效，
+        /// 光赋值不重排是没用的（游戏自己也是先设 customOffset/customScale 再设 url 触发重排）。
+        /// </summary>
+        private static readonly MethodInfo UpdateLayoutMethod =
+            typeof(GLoader).GetMethod("UpdateLayout", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        /// <summary>一份后台解码任务。</summary>
+        private sealed class TextureJob
+        {
+            public string Key;
+            public string Path;
+            public volatile bool Ready;
+            public bool Failed;
+            public int Width;
+            public int Height;
+            public byte[] Rgba;
+        }
+
         private bool _enabled = true;
         private bool _hideFightVideo = true;
         private readonly List<SkinRule> _rules = new List<SkinRule>();
         private string _lastCatalogSignature;
 
+        /// <summary>已就绪的贴图（key 为配置里写的相对路径）。加载失败的也记 null，避免反复重试。</summary>
         private readonly Dictionary<string, NTexture> _nTextures = new Dictionary<string, NTexture>();
-        private readonly List<UnityEngine.Object> _graveyard = new List<UnityEngine.Object>();
+        private readonly Dictionary<string, double> _failedAt = new Dictionary<string, double>();
+        private readonly Dictionary<string, TextureJob> _jobs = new Dictionary<string, TextureJob>();
+        private readonly List<TextureJob> _finished = new List<TextureJob>();
+        private readonly object _jobLock = new object();
+
+        /// <summary>贴图缺失/解码失败后，隔多久再试一次（秒）——方便用户中途补图。</summary>
+        private const double RetryFailedSeconds = 5.0;
+
+        /// <summary>
+        /// 游戏自己的立绘图集偏移表（Skin.bin 的 Offsets）：ImageName → 半身偏移与缩放。
+        /// 原版不是把 1261×2048 的全身图直接铺上去，而是按 CharacterStateSkinOffsetX/Y + Scale 裁出半身。
+        /// 我们照抄原 loader 的 customOffset/customScale；万一接管时游戏还没设（为零），就用这张表兜底。
+        /// </summary>
+        private Dictionary<string, HeroSkinOffset> _offsets;
 
         private GLoader _overlay;
         private UICom_HeroSkin _appliedSkin;
         private GLoader _appliedSource;
         private SkinCandidate _appliedImage;
-        private bool _appliedOriginal;
+
+        // ApplyGeometry 的去重缓存：几何没变就不碰 FairyGUI，避免每帧重建合批造成卡顿
+        private bool _geomValid;
+        private GLoader _geomSource;
+        private float _geomWidth;
+        private float _geomHeight;
+        private float _geomScale;
+        private float _geomX;
+        private float _geomY;
+        private Vector2 _geomBaseOffset;
+        private Vector2 _geomBaseScale;
 
         private string _loggedImage;
         private double _nextPoll;
         private bool _ready;
+        private int _preloadedItem;
 
         /// <summary>接管前的立绘类型（0 静态 / 1 视频），撤掉时还原。</summary>
         private int _savedTypeIndex = -1;
@@ -67,7 +113,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.2.0"; }
+            get { return "1.2.2"; }
         }
 
         public override string Author
@@ -91,13 +137,16 @@ namespace SkinChanceMod
         public override void OnConfigChanged()
         {
             ReadConfig(false);
-            ReleaseCache();
+            Restore();
             ReloadCatalog(true);
             Log.Info("配置已更新：enabled=" + _enabled + "，规则=" + _rules.Count + " 条。");
         }
 
         public override void OnUpdate()
         {
+            // 后台解码完成的贴图在这里上传（主线程），和面板开关无关
+            PumpFinished();
+
             double now = Now();
             if (now < _nextPoll)
             {
@@ -143,34 +192,29 @@ namespace SkinChanceMod
             }
             foreach (KeyValuePair<string, NTexture> item in _nTextures)
             {
-                try
-                {
-                    if (item.Value != null && item.Value.nativeTexture != null)
-                    {
-                        UnityEngine.Object.Destroy(item.Value.nativeTexture);
-                    }
-                }
-                catch
-                {
-                    // ignore
-                }
+                DestroyTexture(item.Value);
             }
             _nTextures.Clear();
-            foreach (UnityEngine.Object obj in _graveyard)
+            lock (_jobLock)
             {
-                if (obj != null)
+                _jobs.Clear();
+                _finished.Clear();
+            }
+        }
+
+        private static void DestroyTexture(NTexture texture)
+        {
+            try
+            {
+                if (texture != null && texture.nativeTexture != null)
                 {
-                    try
-                    {
-                        UnityEngine.Object.Destroy(obj);
-                    }
-                    catch
-                    {
-                        // ignore
-                    }
+                    UnityEngine.Object.Destroy(texture.nativeTexture);
                 }
             }
-            _graveyard.Clear();
+            catch
+            {
+                // ignore
+            }
         }
 
         private static double Now()
@@ -223,6 +267,9 @@ namespace SkinChanceMod
                 Restore();
                 return;
             }
+
+            // 提前把这张皮肤要用的图都排进后台解码队列，避免掉血那一刻才读盘
+            PreloadSkin(itemId);
 
             int hp = self.Property.HP.Value;
             if (hp < 0)
@@ -338,6 +385,7 @@ namespace SkinChanceMod
             // 命中档优先，缺图就按「更完好 → 更残」退化；image 写 0 的那一档用游戏原图
             SkinCandidate chosen = null;
             NTexture texture = null;
+            bool waiting = false;
             for (int i = 0; i < candidates.Count; i++)
             {
                 SkinCandidate candidate = candidates[i];
@@ -347,31 +395,34 @@ namespace SkinChanceMod
                 }
                 if (candidate.original)
                 {
-                    chosen = candidate;
+                    // 更高优先级的图还在解码时就先维持当前画面，别闪回原图
+                    if (!waiting)
+                    {
+                        chosen = candidate;
+                    }
                     break;
                 }
                 if (string.IsNullOrEmpty(candidate.path))
                 {
                     continue;
                 }
-                if (_appliedImage != null && _appliedOriginal == false && _appliedImage.path == candidate.path
-                    && _appliedSource == source && _overlay != null && _overlay.texture != null)
-                {
-                    chosen = candidate;
-                    texture = _overlay.texture;
-                    break;
-                }
-                NTexture loaded = GetTexture(candidate.path);
-                if (loaded != null)
+                NTexture loaded;
+                if (_nTextures.TryGetValue(candidate.path, out loaded) && loaded != null)
                 {
                     chosen = candidate;
                     texture = loaded;
                     break;
                 }
+                // 还没解码完就继续看下一档；全部都在解码中时保持当前画面，不要闪回原图
+                RequestTexture(candidate.path);
+                waiting = true;
             }
             if (chosen == null)
             {
-                Restore();
+                if (!waiting)
+                {
+                    Restore();
+                }
                 return;
             }
 
@@ -389,14 +440,13 @@ namespace SkinChanceMod
             }
 
             EnsureOverlay(skin, source);
-
+            // 必须先铺几何再给贴图：GLoader.UpdateLayout 只在设 url/texture/尺寸时跑一次，
+            // 顺序反了的话 customOffset/customScale 永远不会生效（整张全身图直接铺满，看起来就是尺寸不对）。
+            ApplyGeometry(source, chosen);
             if (_overlay.texture != texture)
             {
                 _overlay.texture = texture;
             }
-            _overlay.customScale = new Vector2(chosen.scale, chosen.scale);
-
-            LayoutOverlay(source, chosen);
             _overlay.visible = true;
             source.visible = false;
             HideVideo(skin);
@@ -404,7 +454,6 @@ namespace SkinChanceMod
             _appliedSkin = skin;
             _appliedSource = source;
             _appliedImage = chosen;
-            _appliedOriginal = false;
 
             if (_loggedImage != chosen.path)
             {
@@ -440,16 +489,23 @@ namespace SkinChanceMod
                 _overlay = new GLoader();
                 _overlay.name = "SkinChanceOverlay";
                 _overlay.touchable = false;
-                _overlay.fill = FillType.ScaleFree;
-                _overlay.align = source.align;
-                _overlay.verticalAlign = source.verticalAlign;
-                _overlay.pivot = new Vector2(0f, 0f);
             }
+            // 轴心也要跟着原 loader，否则 SetSize 时会按轴心补偿位置，和原图错开
+            _overlay.pivotAsAnchor = source.pivotAsAnchor;
+            _overlay.pivot = source.pivot;
+            _overlay.align = source.align;
+            _overlay.verticalAlign = source.verticalAlign;
+            _overlay.fill = source.fill;
+            _overlay.shrinkOnly = source.shrinkOnly;
             skin.AddChild(_overlay);
-            LayoutOverlay(source, null);
         }
 
-        private void LayoutOverlay(GLoader source, SkinCandidate candidate)
+        /// <summary>
+        /// 完全照抄游戏原 loader 的几何：同样的开框尺寸、同样的 fill/align、同样的 customOffset/customScale，
+        /// 再在此基础上乘一个缩放、加一个偏移。不要自己改 fill（改成 ScaleFree 会被拉扁）。
+        /// 几何没变就直接返回 —— 每帧重设尺寸/偏移会让 FairyGUI 重建合批，看起来就是卡一下。
+        /// </summary>
+        private void ApplyGeometry(GLoader source, SkinCandidate candidate)
         {
             if (_overlay == null || source == null)
             {
@@ -457,20 +513,149 @@ namespace SkinChanceMod
             }
             try
             {
-                float w = source.width;
-                float h = source.height;
-                if (_overlay.width != w || _overlay.height != h)
+                float scale = candidate == null || candidate.scale <= 0f ? 1f : candidate.scale;
+                float userX = candidate == null ? 0f : candidate.offsetX;
+                float userY = candidate == null ? 0f : candidate.offsetY;
+
+                float width = source.width;
+                float height = source.height;
+                Vector2 baseScale = source.customScale;
+                if (baseScale.x == 0f || baseScale.y == 0f)
                 {
-                    _overlay.SetSize(w, h);
+                    baseScale = Vector2.one;
                 }
-                float dx = candidate == null ? 0f : candidate.offsetX;
-                float dy = candidate == null ? 0f : candidate.offsetY;
-                _overlay.SetXY(source.x + dx, source.y + dy);
+                Vector2 baseOffset = source.customOffset;
+                // 原 loader 还没被游戏设过几何时（customOffset 为零且 customScale 为单位），
+                // 用 Offsets 表兜底算出半身偏移与缩放，否则会把全身图整张铺上去。
+                if (baseOffset == Vector2.zero && baseScale == Vector2.one && candidate != null && !candidate.original)
+                {
+                    Vector2 fallbackOffset;
+                    Vector2 fallbackScale;
+                    if (TryFallbackGeometry(Path.GetFileNameWithoutExtension(candidate.path), out fallbackOffset, out fallbackScale))
+                    {
+                        baseOffset = fallbackOffset;
+                        baseScale = fallbackScale;
+                    }
+                }
+                float ox = baseOffset.x + userX;
+                // GLoader 里 content.y = -customOffset.y，所以想往下挪要把 customOffset.y 减小
+                float oy = baseOffset.y - userY;
+                if (ox == 0f && oy == 0f && Math.Abs(scale - 1f) > 0.0001f)
+                {
+                    // GLoader.UpdateLayout 只在 customOffset 非零时才应用 customScale，
+                    // 这里给一个亚像素偏移，保证缩放配置能生效。
+                    ox = 0.0001f;
+                }
+
+                if (_geomValid
+                    && _geomSource == source
+                    && _geomWidth == width && _geomHeight == height
+                    && _geomScale == scale && _geomX == userX && _geomY == userY
+                    && _geomBaseOffset == baseOffset && _geomBaseScale == baseScale
+                    && _overlay.fill == source.fill
+                    && _overlay.align == source.align
+                    && _overlay.verticalAlign == source.verticalAlign
+                    && _overlay.shrinkOnly == source.shrinkOnly)
+                {
+                    return;
+                }
+
+                _overlay.fill = source.fill;
+                _overlay.align = source.align;
+                _overlay.verticalAlign = source.verticalAlign;
+                _overlay.shrinkOnly = source.shrinkOnly;
+                if (_overlay.width != width || _overlay.height != height)
+                {
+                    _overlay.SetSize(width, height);
+                }
+                _overlay.customOffset = new Vector2(ox, oy);
+                _overlay.customScale = new Vector2(baseScale.x * scale, baseScale.y * scale);
+                if (_overlay.x != source.x || _overlay.y != source.y)
+                {
+                    _overlay.SetXY(source.x, source.y);
+                }
+                // 只有几何变了、贴图没换的情况下也要重排一次，否则改配置里的缩放/偏移不生效
+                ApplyLayout();
+
+                _geomValid = true;
+                _geomSource = source;
+                _geomWidth = width;
+                _geomHeight = height;
+                _geomScale = scale;
+                _geomX = userX;
+                _geomY = userY;
+                _geomBaseOffset = baseOffset;
+                _geomBaseScale = baseScale;
             }
             catch
             {
                 // ignore
             }
+        }
+
+        private void ApplyLayout()
+        {
+            if (UpdateLayoutMethod == null || _overlay == null)
+            {
+                return;
+            }
+            try
+            {
+                UpdateLayoutMethod.Invoke(_overlay, null);
+            }
+            catch (Exception ex)
+            {
+                Warn("重排立绘覆盖层失败：" + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 游戏自己的立绘偏移表（Skin.bin 的 Offsets，ImageName 为键）。
+        /// 只在原 loader 的 customOffset/customScale 还没设好（为零）时用来兜底。
+        /// </summary>
+        private Dictionary<string, HeroSkinOffset> Offsets
+        {
+            get
+            {
+                if (_offsets != null)
+                {
+                    return _offsets;
+                }
+                try
+                {
+                    GameLogicManager logic = SimpleSingletonProvider<GameLogicManager>.inst;
+                    if (logic != null && logic.heroCard != null && logic.heroCard.heroSkinOffsetDict != null)
+                    {
+                        _offsets = logic.heroCard.heroSkinOffsetDict;
+                    }
+                }
+                catch
+                {
+                    // ignore
+                }
+                return _offsets;
+            }
+        }
+
+        /// <summary>原 loader 还没被游戏设过几何时，用 Offsets 表算出该图的半身偏移与缩放。</summary>
+        private bool TryFallbackGeometry(string imageName, out Vector2 offset, out Vector2 scale)
+        {
+            offset = Vector2.zero;
+            scale = Vector2.one;
+            if (string.IsNullOrEmpty(imageName))
+            {
+                return false;
+            }
+            Dictionary<string, HeroSkinOffset> table = Offsets;
+            HeroSkinOffset data;
+            if (table == null || !table.TryGetValue(imageName, out data) || data == null)
+            {
+                return false;
+            }
+            offset = data.bustSkinOffset;
+            float factor = data.reversalAxisX ? -1f : 1f;
+            scale = new Vector2(data.bustSkinScale * factor, data.bustSkinScale);
+            return true;
         }
 
         private void HideVideo(UICom_HeroSkin skin)
@@ -509,9 +694,7 @@ namespace SkinChanceMod
             {
                 try
                 {
-                    _overlay.texture = null;
                     _overlay.visible = false;
-                    _overlay.customScale = Vector2.one;
                 }
                 catch
                 {
@@ -552,66 +735,195 @@ namespace SkinChanceMod
             _appliedSkin = null;
             _appliedSource = null;
             _appliedImage = null;
-            _appliedOriginal = false;
             _ready = false;
+            _geomValid = false;
+            _geomSource = null;
         }
 
-        // ---------------- 贴图缓存 ----------------
+        // ---------------- 贴图解码（后台线程）----------------
 
-        private NTexture GetTexture(string relative)
+        /// <summary>把该皮肤所有非「原图」档位的贴图丢进解码队列。</summary>
+        private void PreloadSkin(int itemId)
+        {
+            if (_preloadedItem == itemId)
+            {
+                return;
+            }
+            _preloadedItem = itemId;
+            for (int i = 0; i < _rules.Count; i++)
+            {
+                SkinRule rule = _rules[i];
+                if (rule == null || rule.itemId != itemId || rule.stages == null)
+                {
+                    continue;
+                }
+                for (int j = 0; j < rule.stages.Count; j++)
+                {
+                    SkinStage stage = rule.stages[j];
+                    if (stage == null || string.IsNullOrEmpty(stage.image) || SkinRules.IsOriginal(stage.image))
+                    {
+                        continue;
+                    }
+                    RequestTexture(rule.folder + "/" + stage.image);
+                }
+            }
+        }
+
+        /// <summary>排一次后台解码；已完成或正在跑的不会重复排。失败过的隔 RetryFailedSeconds 再试。</summary>
+        private void RequestTexture(string relative)
         {
             if (string.IsNullOrEmpty(relative))
             {
-                return null;
+                return;
             }
-            NTexture cached;
-            if (_nTextures.TryGetValue(relative, out cached))
+            if (_nTextures.ContainsKey(relative))
             {
-                return cached;
+                return;
+            }
+            lock (_jobLock)
+            {
+                if (_jobs.ContainsKey(relative))
+                {
+                    return;
+                }
+            }
+            double failedAt;
+            if (_failedAt.TryGetValue(relative, out failedAt) && Now() - failedAt < RetryFailedSeconds)
+            {
+                return;
             }
 
             string path = ResolvePath(relative);
             if (path == null)
             {
-                Warn("找不到贴图：" + relative);
-                _nTextures[relative] = null;
-                return null;
+                // 用户可能还在往文件夹里拷图，过几秒再找一次
+                _failedAt[relative] = Now();
+                return;
             }
 
-            Texture2D texture = LoadTexture(path);
-            if (texture == null)
+            TextureJob job = new TextureJob();
+            job.Key = relative;
+            job.Path = path;
+            lock (_jobLock)
             {
-                Warn("解码失败：" + path);
-                _nTextures[relative] = null;
-                return null;
+                _jobs[relative] = job;
             }
-
-            NTexture nTexture = new NTexture(texture);
-            _nTextures[relative] = nTexture;
-            Log.Info("已加载贴图 " + texture.width + "x" + texture.height + "：" + path);
-            return nTexture;
-        }
-
-        private void ReleaseCache()
-        {
-            Restore();
-            foreach (KeyValuePair<string, NTexture> item in _nTextures)
+            ThreadPool.QueueUserWorkItem(delegate
             {
                 try
                 {
-                    if (item.Value != null && item.Value.nativeTexture != null)
+                    byte[] data = File.ReadAllBytes(path);
+                    int width;
+                    int height;
+                    byte[] rgba;
+                    if (!PngDecoder.TryDecode(data, out width, out height, out rgba))
                     {
-                        UnityEngine.Object.Destroy(item.Value.nativeTexture);
+                        job.Failed = true;
+                    }
+                    else
+                    {
+                        FlipRows(rgba, width, height);
+                        job.Width = width;
+                        job.Height = height;
+                        job.Rgba = rgba;
                     }
                 }
                 catch
                 {
-                    // ignore
+                    job.Failed = true;
+                }
+                job.Ready = true;
+            });
+        }
+
+        /// <summary>主线程收尾：把解码好的 RGBA 上传成 Texture2D。</summary>
+        private void PumpFinished()
+        {
+            _finished.Clear();
+            lock (_jobLock)
+            {
+                if (_jobs.Count == 0)
+                {
+                    return;
+                }
+                List<string> keys = null;
+                foreach (KeyValuePair<string, TextureJob> item in _jobs)
+                {
+                    if (item.Value != null && item.Value.Ready)
+                    {
+                        if (keys == null)
+                        {
+                            keys = new List<string>();
+                        }
+                        keys.Add(item.Key);
+                    }
+                }
+                if (keys == null)
+                {
+                    return;
+                }
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    _finished.Add(_jobs[keys[i]]);
+                    _jobs.Remove(keys[i]);
                 }
             }
-            _nTextures.Clear();
-            _loggedImage = null;
-            _ready = false;
+
+            for (int i = 0; i < _finished.Count; i++)
+            {
+                TextureJob job = _finished[i];
+                if (job.Failed || job.Rgba == null)
+                {
+                    Warn("解码失败：" + job.Path);
+                    _failedAt[job.Key] = Now();
+                    continue;
+                }
+                Texture2D texture = CreateTexture(job.Width, job.Height, job.Rgba);
+                if (texture == null)
+                {
+                    _failedAt[job.Key] = Now();
+                    continue;
+                }
+                _nTextures[job.Key] = new NTexture(texture);
+                _failedAt.Remove(job.Key);
+                Log.Info("已加载贴图 " + job.Width + "x" + job.Height + "：" + job.Path);
+            }
+            _finished.Clear();
+        }
+
+        private static Texture2D CreateTexture(int width, int height, byte[] rgba)
+        {
+            try
+            {
+                Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.filterMode = FilterMode.Bilinear;
+                texture.LoadRawTextureData(rgba);
+                texture.Apply(false, false);
+                return texture;
+            }
+            catch (Exception ex)
+            {
+                WarnStatic("创建贴图失败：" + ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>PNG 自上而下，Unity 贴图自下而上，逐行翻转。</summary>
+        private static void FlipRows(byte[] rgba, int width, int height)
+        {
+            int stride = width * 4;
+            for (int y = 0; y < height / 2; y++)
+            {
+                int top = y * stride;
+                int bottom = (height - 1 - y) * stride;
+                for (int i = 0; i < stride; i++)
+                {
+                    byte tmp = rgba[top + i];
+                    rgba[top + i] = rgba[bottom + i];
+                    rgba[bottom + i] = tmp;
+                }
+            }
         }
 
         private static string ResolvePath(string relative)
@@ -629,8 +941,8 @@ namespace SkinChanceMod
                 {
                     candidates.Add(Path.Combine(root, normalized));
                 }
-                candidates.Add(normalized);
                 candidates.Add(Path.Combine(DefaultFolder, normalized));
+                candidates.Add(normalized);
             }
             foreach (string candidate in candidates)
             {
@@ -647,49 +959,6 @@ namespace SkinChanceMod
                 }
             }
             return null;
-        }
-
-        private Texture2D LoadTexture(string path)
-        {
-            byte[] data;
-            try
-            {
-                data = File.ReadAllBytes(path);
-            }
-            catch (Exception ex)
-            {
-                Warn("读取失败：" + ex.Message);
-                return null;
-            }
-
-            int width;
-            int height;
-            byte[] rgba;
-            if (!PngDecoder.TryDecode(data, out width, out height, out rgba))
-            {
-                return null;
-            }
-
-            // PNG 自上而下，Unity 贴图自下而上，逐行翻转
-            int stride = width * 4;
-            for (int y = 0; y < height / 2; y++)
-            {
-                int top = y * stride;
-                int bottom = (height - 1 - y) * stride;
-                for (int i = 0; i < stride; i++)
-                {
-                    byte tmp = rgba[top + i];
-                    rgba[top + i] = rgba[bottom + i];
-                    rgba[bottom + i] = tmp;
-                }
-            }
-
-            Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            texture.wrapMode = TextureWrapMode.Clamp;
-            texture.filterMode = FilterMode.Bilinear;
-            texture.LoadRawTextureData(rgba);
-            texture.Apply(false, false);
-            return texture;
         }
 
         // ---------------- 配置 ----------------
@@ -744,6 +1013,7 @@ namespace SkinChanceMod
         /// <summary>
         /// 重新扫描 skins\&lt;文件夹&gt;\config.json。用文件时间戳做指纹，
         /// 没变化就直接返回，不会每 2 秒重读 136 个文件。
+        /// 只换规则，不清贴图缓存 —— 清了就要重新解码，改个血量阈值也卡一下。
         /// </summary>
         private void ReloadCatalog(bool force)
         {
@@ -764,10 +1034,10 @@ namespace SkinChanceMod
             _rules.Clear();
             _rules.AddRange(rules);
             _lastCatalogSignature = signature;
+            _preloadedItem = 0;
 
             if (!force)
             {
-                ReleaseCache();
                 Log.Info("皮肤配置已更新：共 " + _rules.Count + " 条规则。");
             }
         }
@@ -806,12 +1076,6 @@ namespace SkinChanceMod
             {
                 return "";
             }
-        }
-
-        /// <summary>按皮肤 + 血量百分比查候选贴图；未配置该皮肤时返回空表。</summary>
-        private List<SkinCandidate> PickImages(int itemId, int percent)
-        {
-            return SkinRules.Candidates(_rules, itemId, percent);
         }
 
         /// <summary>
@@ -872,6 +1136,18 @@ namespace SkinChanceMod
             try
             {
                 Log.Warn(message);
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        private static void WarnStatic(string message)
+        {
+            try
+            {
+                UnityEngine.Debug.LogWarning("[SkinChanceMod] " + message);
             }
             catch
             {

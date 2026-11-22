@@ -11,7 +11,7 @@
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.2.0.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
+1. 下载 Release 里的 `SkinChanceMod-1.2.2.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`。
 2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（136 个文件夹，每个文件夹里有一个 `config.json`）。
 3. 启动游戏，选人进局。
 
@@ -86,7 +86,9 @@ mods\SkinChanceMod\skins\
 - 左下角立绘是 `UIBattleInfoPanel.loader_Skin`（`GetChildAt(10)`），实际类型 `UICom_HeroSkin`，里面两个子对象：`loader_Skin_Image`（静态图，`GLoader`）与 `loader_Skin_Video`（视频，`GGraph`）。
 - 游戏唯一的刷新入口是 `BattleInfoPanel.RefreshHeroSkin()` → `CommonUIManager.RendererSkin(...)`，它会直接改 `loader_Skin_Image.url`。**改 url 一定被顶掉**，所以本模组不动它。
 - 做法：在 `UICom_HeroSkin` 里按原图的位置和尺寸加一个自己的 `GLoader`（`SkinChanceOverlay`）盖上去，原 `loader_Skin_Image` 只 `visible = false`；撤掉接管时把 `visible` 还回去。
-- 每张皮肤的规则来自 `skins\<文件夹>\config.json`，模组默认每 2 秒按文件时间戳检查一次有没有改动（`reloadSeconds` 可调），改完保存即可，无需重启。
+- 覆盖层的 `fill`/`align`/`verticalAlign`/`shrinkOnly` **完全照抄原 `loader_Skin_Image`**，并把原 loader 的 `customOffset`/`customScale` 作为基准，再叠加配置里的 `scale`/`offsetX`/`offsetY` —— 否则宽高比会和原图不一致（看起来被拉扁）。几何没变化时不碰 FairyGUI，避免每帧重设尺寸/偏移导致合批重建（切档时卡一下）。
+- 贴图解码走后台线程（`PngDecoder` + 逐行翻转），主线程只做 `Texture2D.LoadRawTextureData` 上传；进入对局时会把当前皮肤所有档位提前排进解码队列，掉血切档不会现场读盘。缺图/解码失败每 5 秒重试一次，中途补图也能生效。
+- 每张皮肤的规则来自 `skins\<文件夹>\config.json`，模组默认每 2 秒按文件时间戳检查一次有没有改动（`reloadSeconds` 可调），改完保存即可，无需重启；热重载只换规则，不清贴图缓存。
 - 当前皮肤来自 `GameLogicManager.inst.battle.GetSelfPlayerData().player.standingPainting.ItemID`；血量来自 `BattlePlayerData.Property.HP.Value` 与 `Property.maxHP`。
 - 面板通过反射 `UIManager._cachedPanelDict[UIPanelType.BattleInfo]` 取，不会因为轮询而提前构造面板。
 - 贴图解码不依赖 `ImageConversion.LoadImage`（HybridCLR 下不一定能反射到），自带一个纯托管 PNG 解码器（`PngDecoder`），解出 RGBA 后逐行垂直翻转再 `LoadRawTextureData`。
@@ -115,7 +117,7 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.2.0.zip` 与 `dist\skins.zip`（136 个文件夹，每个含 `config.json` + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.2.2.zip` 与 `dist\skins.zip`（136 个文件夹，每个含 `config.json` + 使用说明）。
 
 `tools\` 下是可重跑的生成脚本：`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
@@ -123,12 +125,15 @@ mods\SkinChanceMod\skins\
 
 - 游戏 SDK：3.8.7；清单 `sdkVersion` 写 `3.8.1`。
 - 反编译核对：`UIBattleInfoPanel.cs:41/355`、`UICom_HeroSkin.cs`、`BattleInfoPanel.cs:529`、`CommonUIManager.cs:393`、`BattleProperty.cs:22/24`、`GLoader.cs:41/295/505`、`NGraphics.cs:150`。
+- 半身取景：原版靠 `Skin.bin` 顶层 `Offsets`（`SkinOffsetConfigure.CharacterStateSkinOffsetX/Y` + `CharacterStateSkinScale`）把 1261×2048 的全身图裁成半身，运行时经 `HeroSkinOffset`（`bustSkinOffset`/`bustSkinScale`）交给 `CommonUIManager.RendererSkin`；`UT_Hero_Card_117_04` 的取值是 offset `(95, 135)`、scale `0.66`。`GLoader.UpdateLayout()`（`GLoader.cs:561`）才真正应用 `customOffset`/`customScale`，而且只在设 `url`/`texture`/尺寸时跑 —— **先赋贴图再写偏移等于没写**。
 - 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（**左下角立绘**，`BattleInfoPanel.RefreshHeroSkin()` 就用它）、字段 15 = `Bust`（PK 弹窗小图，别混），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
 - 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，38 角色 / 136 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**。
 - 缺档退化：`SkinRules.Candidates` 命中档 → 更完好 → 更残；离线单测 202 项全过（`_skintest`，覆盖规则、原图判定、目录读取、默认值与越界夹取）。
 
 ## 更新日志
 
+- **1.2.2**：修「立绘尺寸不对、不是半身」——根因是 `GLoader.UpdateLayout()` 才是真正应用 `customOffset`/`customScale` 的地方（只在设 `url`/`texture`/尺寸时跑），原来先赋贴图后写偏移，偏移永远不生效，等于把 1261×2048 的全身图整张铺上去。现在改为先铺几何再给贴图，并在几何变化后主动重排一次；原 loader 尚未被游戏设过几何时，用游戏自己的 `Skin.bin` Offsets 表（`heroSkinOffsetDict`，`CharacterStateSkinOffsetX/Y` + `CharacterStateSkinScale`）兜底，和原版半身取景一致。
+- **1.2.1**：修两处体验问题 —— ①切档时不再卡一下：贴图解码挪到后台线程、进对局提前预解码该皮肤全部档位、几何无变化时不碰 FairyGUI（原来每 0.2 秒重设一次尺寸/偏移会导致合批重建）；②不再被拉扁：覆盖层的 `fill`/`align`/`verticalAlign`/`shrinkOnly` 改为照抄原 `loader_Skin_Image`，并把原 loader 的 `customOffset`/`customScale` 当基准再叠加配置值。另外缺图/解码失败改为每 5 秒重试，中途补图也能生效。
 - **1.2.0**：改成**每张皮肤一个 `config.json`**（`skins\<ItemID>_<皮肤名>\config.json`）；支持 `image: "0"` 表示原图、只写数字自动补 `.png`、每档独立的 `scale`/`offsetX`/`offsetY`；模组每 2 秒按文件时间戳热重载各皮肤配置（`reloadSeconds` 可调）；模组根配置只剩 `enabled`/`hideFightVideo`/`reloadSeconds` 三个开关。
 - **1.1.0**：默认配置展开全部 136 张皮肤（三档 100/60/25），启动时自动建好 `skins\<ItemID>_<皮肤名>\` 文件夹，并随 Release 提供 `skins.zip`；缺图时按「更完好 → 更残」退化。
 - **1.0.1**：`SKINS.md` / `skins.json` 改用 3.3.0 数据重新抽取（36→38 角色、131→136 条皮肤，补上 `100117006 钢羽森姬-茉莉` 等）；模组代码无改动。
