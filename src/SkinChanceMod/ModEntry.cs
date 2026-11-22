@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 using CesiumLoader.SDK;
 using CesiumLoader.SDK.Configuration;
+using CesiumLoader.SDK.Inputs;
 using CesiumLoader.SDK.Mods;
 using FairyGUI;
 using GameLogic;
@@ -112,6 +113,24 @@ namespace SkinChanceMod
         private int _savedTypeIndex = -1;
         private bool _videoHidden;
 
+        // ---------------- 编辑器 ----------------
+
+        /// <summary>皮肤贴图文件夹名 → 该皮肤当前是否用「原图」档，编辑器要据此提示。</summary>
+        private SkinEditorPanel _editor;
+        private readonly SkinEditState _edit = new SkinEditState();
+        private bool _editing;
+        private KeyCode _editKey = KeyCode.F12;
+        private bool _editKeyHeld;
+        private int _editItemId;
+        private int _editPercent;
+
+        /// <summary>拖动立绘时记录起点，避免每帧累积误差。</summary>
+        private bool _skinDragging;
+        private Vector2 _dragStartPointer;
+        private float _dragStartOffsetX;
+        private float _dragStartOffsetY;
+        private float _dragStartScale;
+
         public override string Name
         {
             get { return "战损立绘"; }
@@ -119,7 +138,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.2.4"; }
+            get { return "1.3.0"; }
         }
 
         public override string Author
@@ -152,6 +171,16 @@ namespace SkinChanceMod
         {
             // 后台解码完成的贴图在这里上传（主线程），和面板开关无关
             PumpFinished();
+
+            // 编辑热键不跟着 0.2 秒的节流走，否则按一下可能整段被跳过
+            try
+            {
+                TickEditKey();
+            }
+            catch (Exception ex)
+            {
+                Warn("编辑热键处理失败：" + ex.Message);
+            }
 
             double now = Now();
             if (now < _nextPoll)
@@ -1025,6 +1054,11 @@ namespace SkinChanceMod
                 "多久檢查一次 skins 目錄裡各皮膚 config.json 的改動（秒），改完儲存即可生效，無需重啟。",
                 "How often (seconds) to re-read each skin's config.json so edits apply without restarting.",
                 "skins 内の各 config.json を再読み込みする間隔（秒）。保存すれば再起動不要。"));
+            changed |= cfg.SetDefault("editKey", "F12", ConfigDoc.Of(
+                "编辑立绘的快捷键：局内按一下打开编辑器，可拖动立绘调大小/位置，点保存写回该皮肤的 config.json。填 Unity KeyCode 名称（F12、F11、Insert、Home、BackQuote 等），写 None 停用。",
+                "編輯立繪的快捷鍵：局內按一下開啟編輯器，可拖動立繪調大小/位置，點儲存寫回該皮膚的 config.json。填 Unity KeyCode 名稱（F12、F11、Insert、Home、BackQuote 等），寫 None 停用。",
+                "Hotkey to open the in-game splash-art editor. Press once in a match to drag/scale the art, then click save to write it back to that skin's config.json. Use a Unity KeyCode name (F12, F11, Insert, Home, BackQuote...); write None to disable.",
+                "立ち絵エディタを開くホットキー。試合中に一度押すとエディタが開き、ドラッグで位置と大きさを調整して保存すると、そのスキンの config.json に書き戻します。Unity の KeyCode 名（F12、F11、Insert、Home、BackQuote など）を指定し、None で無効化。"));
             if (changed || firstLoad)
             {
                 cfg.SaveIfDirty();
@@ -1032,6 +1066,8 @@ namespace SkinChanceMod
 
             _enabled = cfg.GetBool("enabled", true);
             _hideFightVideo = cfg.GetBool("hideFightVideo", true);
+            _editKey = ParseKey(cfg.GetString("editKey", "F12"), KeyCode.F12);
+            _editKeyHeld = false;
             double reload = cfg.GetFloat("reloadSeconds", 2f);
             if (reload < 0.5)
             {
@@ -1047,6 +1083,21 @@ namespace SkinChanceMod
 
         private double _reloadSeconds = 2.0;
         private double _nextCatalogCheck;
+
+        /// <summary>键名写错就退回默认值，不要因为一个笔误让热键失效。</summary>
+        private static KeyCode ParseKey(string name, KeyCode fallback)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return fallback;
+            }
+            KeyCode key;
+            if (Enum.TryParse(name.Trim(), true, out key) && key != KeyCode.None)
+            {
+                return key;
+            }
+            return fallback;
+        }
 
         /// <summary>
         /// 重新扫描 skins\&lt;文件夹&gt;\config.json。用文件时间戳做指纹，
@@ -1166,6 +1217,358 @@ namespace SkinChanceMod
             catch (Exception ex)
             {
                 Warn("预建皮肤文件夹失败：" + ex.Message);
+            }
+        }
+
+        // ---------------- 编辑器 ----------------
+
+        /// <summary>F12 开关编辑器。用 IsKeyHeld 自算下降沿：IsKeyPressed 只在本帧为真，掉一帧就丢。</summary>
+        private void TickEditKey()
+        {
+            bool held = _editKey != KeyCode.None
+                && InputService.IsAvailable
+                && !InputService.IsKeyboardCaptured
+                && InputService.IsKeyHeld(_editKey);
+            bool edge = held && !_editKeyHeld;
+            _editKeyHeld = held;
+            if (!edge)
+            {
+                return;
+            }
+            if (_editing)
+            {
+                CloseEditor();
+            }
+            else
+            {
+                OpenEditor();
+            }
+        }
+
+        private void OpenEditor()
+        {
+            BattleInfoPanel panel = FindBattleInfoPanel();
+            if (panel == null || !panel.IsOpen())
+            {
+                Log.Info("编辑器：进对局后（左下角立绘出现时）再按 " + _editKey + "。");
+                return;
+            }
+            BattlePlayerData self = GetSelfPlayerData();
+            if (self == null || self.player == null)
+            {
+                Log.Info("编辑器：还没拿到自己的战斗数据。");
+                return;
+            }
+            int itemId = ResolveItemId(self);
+            SkinRule rule = SkinRules.FindRule(_rules, itemId);
+            if (rule == null || rule.stages == null || rule.stages.Count == 0)
+            {
+                Log.Info("编辑器：皮肤 " + itemId + " 没有可用规则。");
+                return;
+            }
+
+            int percent = CurrentPercent(self);
+            int hit = SkinRules.HitIndex(rule, percent);
+            if (hit < 0)
+            {
+                hit = rule.stages.Count - 1;
+            }
+            if (hit < 0 || hit >= rule.stages.Count)
+            {
+                return;
+            }
+
+            _editItemId = itemId;
+            _editPercent = percent;
+            _edit.itemId = itemId;
+            _edit.folder = rule.folder;
+            _edit.skinName = Path.GetFileName(rule.folder);
+            _edit.stageIndex = hit;
+            _edit.CopyFrom(rule.stages[hit]);
+            _edit.percent = rule.stages[hit].hpPercent;
+
+            if (_editor == null)
+            {
+                _editor = new SkinEditorPanel(Warn);
+                _editor.OnScaleDown = delegate { NudgeScale(-ScaleStep); };
+                _editor.OnScaleUp = delegate { NudgeScale(ScaleStep); };
+                _editor.OnLeft = delegate { NudgeOffset(-OffsetStep, 0f); };
+                _editor.OnRight = delegate { NudgeOffset(OffsetStep, 0f); };
+                _editor.OnUp = delegate { NudgeOffset(0f, -OffsetStep); };
+                _editor.OnDown = delegate { NudgeOffset(0f, OffsetStep); };
+                _editor.OnSave = SaveEditor;
+                _editor.OnReset = ResetEditor;
+                _editor.OnClose = CloseEditor;
+            }
+            _editing = true;
+            EnsureEditorOverlay();
+            _editor.Show(
+                "立绘编辑 · " + _edit.skinName,
+                "第 " + (hit + 1) + " 档（HP ≤ " + _edit.percent + "%） · 当前 HP " + percent + "% · " + ImageLabel(_edit.image),
+                _edit.scale,
+                _edit.offsetX,
+                _edit.offsetY);
+            Log.Info("编辑器已打开：" + _edit.skinName + " 第 " + (hit + 1) + " 档（" + ImageLabel(_edit.image) + "）。");
+        }
+
+        private void CloseEditor()
+        {
+            if (!_editing)
+            {
+                return;
+            }
+            _editing = false;
+            if (_editor != null)
+            {
+                _editor.Hide();
+            }
+            ReleaseEditorOverlay();
+            Log.Info("编辑器已关闭。");
+        }
+
+        private static string ImageLabel(string image)
+        {
+            return SkinRules.IsOriginal(image) || string.IsNullOrEmpty(image) ? "游戏原图" : image;
+        }
+
+        private const float ScaleStep = 0.05f;
+        private const float OffsetStep = 10f;
+        private const float MinScale = 0.1f;
+        private const float MaxScale = 4f;
+
+        private void NudgeScale(float delta)
+        {
+            _edit.scale = Clamp(_edit.scale + delta, MinScale, MaxScale);
+            RefreshEditor();
+        }
+
+        private void NudgeOffset(float dx, float dy)
+        {
+            _edit.offsetX += dx;
+            _edit.offsetY += dy;
+            RefreshEditor();
+        }
+
+        private static float Clamp(float value, float min, float max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+            if (value > max)
+            {
+                return max;
+            }
+            return value;
+        }
+
+        /// <summary>把编辑器里的数值推到当前档，立刻在画面上生效（不落盘）。</summary>
+        private void RefreshEditor()
+        {
+            SkinRule rule = SkinRules.FindRule(_rules, _editItemId);
+            if (rule == null || rule.stages == null)
+            {
+                return;
+            }
+            // 编辑的是「打开编辑器那一刻命中的那一档」，不要随着拖动反复重算，
+            // 否则改到一半血量变化会跳到别的档上。
+            int hit = _edit.stageIndex;
+            if (hit < 0 || hit >= rule.stages.Count)
+            {
+                hit = SkinRules.HitIndex(rule, _editPercent);
+            }
+            if (hit >= 0 && hit < rule.stages.Count)
+            {
+                SkinStage stage = rule.stages[hit];
+                if (stage == null)
+                {
+                    return;
+                }
+                stage.scale = _edit.scale;
+                stage.offsetX = _edit.offsetX;
+                stage.offsetY = _edit.offsetY;
+                _edit.stageIndex = hit;
+                _edit.percent = stage.hpPercent;
+                _edit.image = stage.image;
+            }
+            if (_editor != null)
+            {
+                _editor.UpdateValues(_edit.scale, _edit.offsetX, _edit.offsetY);
+            }
+            // 数值改了要让 ApplyGeometry 重新走一遍
+            _geomValid = false;
+        }
+
+        /// <summary>保存：写回该皮肤文件夹的 config.json。</summary>
+        private void SaveEditor()
+        {
+            SkinRule rule = SkinRules.FindRule(_rules, _editItemId);
+            if (rule == null || rule.stages == null || rule.stages.Count == 0)
+            {
+                Warn("保存失败：找不到皮肤 " + _editItemId + " 的规则。");
+                return;
+            }
+            string path = ConfigPathOf(rule);
+            if (path == null)
+            {
+                Warn("保存失败：找不到配置文件 " + rule.folder + "/config.json。");
+                return;
+            }
+            if (!SkinCatalog.SaveStages(path, rule.itemId, _edit.skinName, rule.stages))
+            {
+                Warn("保存失败：" + path);
+                return;
+            }
+            Log.Info("已保存：" + Path.GetFileName(path) + " 第 " + (_edit.stageIndex + 1) + " 档（缩放 "
+                + _edit.scale.ToString("0.00") + "，偏移 " + _edit.offsetX.ToString("0") + "," + _edit.offsetY.ToString("0") + "）。");
+            // 让热重载下一轮能察觉（时间戳已变），同时立刻刷一次指纹避免重复读
+            _lastCatalogSignature = null;
+        }
+
+        /// <summary>恢复该档到默认缩放/偏移（1 倍、零偏移），要按保存才落盘。</summary>
+        private void ResetEditor()
+        {
+            _edit.scale = 1f;
+            _edit.offsetX = 0f;
+            _edit.offsetY = 0f;
+            RefreshEditor();
+            Log.Info("已恢复默认缩放与偏移（记得点保存）。");
+        }
+
+        private string ConfigPathOf(SkinRule rule)
+        {
+            try
+            {
+                string root = SdkPath.CurrentModDirectory;
+                if (string.IsNullOrEmpty(root) || rule == null || string.IsNullOrEmpty(rule.folder))
+                {
+                    return null;
+                }
+                string relative = rule.folder.Replace('/', Path.DirectorySeparatorChar);
+                string dir = Path.Combine(root, relative);
+                string path = Path.Combine(dir, SkinCatalog.ConfigFileName);
+                return File.Exists(path) ? path : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private int CurrentPercent(BattlePlayerData self)
+        {
+            int maxHp = self.Property.maxHP;
+            if (maxHp <= 0)
+            {
+                return 100;
+            }
+            int hp = self.Property.HP.Value;
+            if (hp < 0)
+            {
+                hp = 0;
+            }
+            if (hp > maxHp)
+            {
+                hp = maxHp;
+            }
+            return (int)Math.Floor(hp * 100.0 / maxHp);
+        }
+
+        /// <summary>编辑器开着时，把覆盖层改成可拖：按住拖 = 移动，按住 Ctrl 拖 = 缩放。</summary>
+        private void EnsureEditorOverlay()
+        {
+            if (_overlay == null)
+            {
+                return;
+            }
+            if (_skinDragging)
+            {
+                return;
+            }
+            try
+            {
+                _overlay.touchable = true;
+                _overlay.onTouchBegin.Remove(OnSkinTouchBegin);
+                _overlay.onTouchBegin.Add(OnSkinTouchBegin);
+                _overlay.onTouchMove.Remove(OnSkinTouchMove);
+                _overlay.onTouchMove.Add(OnSkinTouchMove);
+                _overlay.onTouchEnd.Remove(OnSkinTouchEnd);
+                _overlay.onTouchEnd.Add(OnSkinTouchEnd);
+            }
+            catch (Exception ex)
+            {
+                Warn("编辑器接管立绘失败：" + ex.Message);
+            }
+        }
+
+        private void OnSkinTouchBegin(EventContext context)
+        {
+            if (!_editing)
+            {
+                return;
+            }
+            InputEvent input = context.inputEvent;
+            _dragStartPointer = new Vector2(input.x, input.y);
+            _dragStartOffsetX = _edit.offsetX;
+            _dragStartOffsetY = _edit.offsetY;
+            _dragStartScale = _edit.scale;
+            _skinDragging = true;
+            context.CaptureTouch();
+            context.StopPropagation();
+        }
+
+        private void OnSkinTouchMove(EventContext context)
+        {
+            if (!_editing || !_skinDragging)
+            {
+                return;
+            }
+            InputEvent input = context.inputEvent;
+            float dx = input.x - _dragStartPointer.x;
+            float dy = input.y - _dragStartPointer.y;
+            if (input.ctrl)
+            {
+                // 缩放：往上拖放大、往下拖缩小
+                _edit.scale = Clamp(_dragStartScale + (dy / 240f), MinScale, MaxScale);
+            }
+            else
+            {
+                _edit.offsetX = _dragStartOffsetX + dx;
+                _edit.offsetY = _dragStartOffsetY + dy;
+            }
+            RefreshEditor();
+            context.StopPropagation();
+        }
+
+        private void OnSkinTouchEnd(EventContext context)
+        {
+            if (!_skinDragging)
+            {
+                return;
+            }
+            _skinDragging = false;
+            Log.Info("立绘已调整：缩放 " + _edit.scale.ToString("0.00") + "，偏移 "
+                + _edit.offsetX.ToString("0") + "," + _edit.offsetY.ToString("0") + "（点保存写回配置）。");
+        }
+
+        /// <summary>编辑器关掉后把立绘交还给游戏（不再拦截点击）。</summary>
+        private void ReleaseEditorOverlay()
+        {
+            if (_overlay == null)
+            {
+                return;
+            }
+            try
+            {
+                _skinDragging = false;
+                _overlay.onTouchBegin.Remove(OnSkinTouchBegin);
+                _overlay.onTouchMove.Remove(OnSkinTouchMove);
+                _overlay.onTouchEnd.Remove(OnSkinTouchEnd);
+                _overlay.touchable = false;
+            }
+            catch
+            {
+                // ignore
             }
         }
 

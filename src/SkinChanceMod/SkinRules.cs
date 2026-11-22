@@ -53,16 +53,57 @@ namespace SkinChanceMod
         /// <summary>配置里写这个值等于「用游戏原图」。</summary>
         public const string OriginalName = "0";
 
-        /// <summary>image 是否表示「用游戏原图」。</summary>
+        /// <summary>
+        /// image 是否表示「用游戏原图」。只认裸的 "0"：
+        /// "0.png" 是文件名（有人会把图命名成 0.png），不能当成原图吃掉。
+        /// </summary>
         public static bool IsOriginal(string image)
         {
             if (string.IsNullOrEmpty(image))
             {
                 return false;
             }
-            string value = image.Trim();
-            return string.Equals(value, "0", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(value, "0.png", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(image.Trim(), OriginalName, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>找到某张皮肤的规则，没有就返回 null。</summary>
+        public static SkinRule FindRule(IList<SkinRule> rules, int itemId)
+        {
+            if (rules == null)
+            {
+                return null;
+            }
+            for (int i = 0; i < rules.Count; i++)
+            {
+                if (rules[i] != null && rules[i].itemId == itemId)
+                {
+                    return rules[i];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 当前血量命中 rule.stages 的哪一档；返回的是 <b>rule.stages 里的下标</b>
+        /// （不是排序后的顺序下标，编辑器要拿它直接改用户写的那一档）；没命中返回 -1。
+        /// </summary>
+        public static int HitIndex(SkinRule rule, int percent)
+        {
+            if (rule == null || rule.stages == null || rule.stages.Count == 0)
+            {
+                return -1;
+            }
+            List<SkinStage> ordered = new List<SkinStage>(rule.stages);
+            ordered.RemoveAll((SkinStage stage) => stage == null || string.IsNullOrEmpty(stage.image));
+            ordered.Sort((SkinStage a, SkinStage b) => a.hpPercent.CompareTo(b.hpPercent));
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                if (percent <= ordered[i].hpPercent)
+                {
+                    return rule.stages.IndexOf(ordered[i]);
+                }
+            }
+            return -1;
         }
 
         /// <summary>

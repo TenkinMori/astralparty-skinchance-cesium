@@ -190,6 +190,60 @@ namespace SkinChanceMod
             return WriteDefault(path, itemId, folderName);
         }
 
+        /// <summary>
+        /// 把某一档的数值写回该皮肤的 config.json（编辑器保存用）。
+        /// 保留 itemId / name，其余档位原样保留，只改目标档的 image/scale/offsetX/offsetY。
+        /// </summary>
+        public static bool SaveStages(string configPath, int itemId, string name, List<SkinStage> stages)
+        {
+            if (string.IsNullOrEmpty(configPath) || stages == null)
+            {
+                return false;
+            }
+            try
+            {
+                string dir = Path.GetDirectoryName(configPath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                string json = BuildJson(itemId, name, stages);
+                File.WriteAllText(configPath, json, new UTF8Encoding(false));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static string BuildJson(int itemId, string name, List<SkinStage> stages)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\n");
+            sb.Append("  \"itemId\": ").Append(itemId.ToString(CultureInfo.InvariantCulture)).Append(",\n");
+            sb.Append("  \"name\": \"").Append(Escape(name)).Append("\",\n");
+            sb.Append("  \"stages\": [\n");
+            for (int i = 0; i < stages.Count; i++)
+            {
+                SkinStage stage = stages[i];
+                sb.Append("    { \"hpPercent\": ").Append(stage.hpPercent.ToString(CultureInfo.InvariantCulture));
+                sb.Append(", \"image\": \"").Append(Escape(stage.image)).Append("\"");
+                sb.Append(", \"scale\": ").Append(stage.scale.ToString("0.###", CultureInfo.InvariantCulture));
+                sb.Append(", \"offsetX\": ").Append(stage.offsetX.ToString("0.##", CultureInfo.InvariantCulture));
+                sb.Append(", \"offsetY\": ").Append(stage.offsetY.ToString("0.##", CultureInfo.InvariantCulture));
+                sb.Append(" }");
+                if (i < stages.Count - 1)
+                {
+                    sb.Append(",");
+                }
+                sb.Append("\n");
+            }
+            sb.Append("  ]\n");
+            sb.Append("}\n");
+            return sb.ToString();
+        }
+
         private static bool WriteDefault(string path, int itemId, string folderName)
         {
             try
