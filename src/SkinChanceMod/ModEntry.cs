@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -151,7 +151,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.3.3"; }
+            get { return "1.3.4"; }
         }
 
         public override string Author
@@ -247,6 +247,25 @@ namespace SkinChanceMod
             {
                 _jobs.Clear();
                 _finished.Clear();
+            }
+        }
+
+        /// <summary>
+        /// 缓存的 NTexture 还能不能用：跨局之后可能已经被 Dispose（`_root` 被置空）或 nativeTexture 被销毁。
+        /// </summary>
+        private static bool IsUsable(NTexture texture)
+        {
+            if (texture == null || texture.disposed)
+            {
+                return false;
+            }
+            try
+            {
+                return texture.nativeTexture != null;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -494,11 +513,16 @@ namespace SkinChanceMod
                     continue;
                 }
                 NTexture loaded;
-                if (_nTextures.TryGetValue(candidate.path, out loaded) && loaded != null)
+                if (_nTextures.TryGetValue(candidate.path, out loaded))
                 {
-                    chosen = candidate;
-                    texture = loaded;
-                    break;
+                    if (IsUsable(loaded))
+                    {
+                        chosen = candidate;
+                        texture = loaded;
+                        break;
+                    }
+                    // 缓存的 NTexture 已经不可用了（跨局被 release 掉），丢掉重新解码
+                    _nTextures.Remove(candidate.path);
                 }
                 // 还没解码完就继续看下一档；全部都在解码中时保持当前画面，不要闪回原图
                 RequestTexture(candidate.path);
@@ -556,6 +580,17 @@ namespace SkinChanceMod
 
         private void EnsureOverlay(UICom_HeroSkin skin, GLoader source)
         {
+            // 一局打完，游戏会把整个 UIBattleInfoPanel 树 Dispose 掉，我们是挂在 loader_Skin 下的子对象，
+            // 会跟着一起被销毁（GComponent.Dispose 倒序 Dispose 所有子对象）。
+            // 这时 _overlay 字段还在，但 displayObject/_content 已经没了，再 AddChild 上去
+            // 一碰 texture/SetSize 就是 NullReferenceException，表现就是第二局立绘不出来。
+            if (_overlay != null && _overlay.isDisposed)
+            {
+                _overlay = null;
+                _geomValid = false;
+                _geomSource = null;
+                Log.Info("上一局的覆盖层已随面板销毁，重新创建。");
+            }
             if (_overlay != null && _overlay.parent == skin)
             {
                 return;
@@ -783,6 +818,20 @@ namespace SkinChanceMod
         /// <summary>把接管撤掉，恢复游戏自己的立绘。</summary>
         private void Restore()
         {
+            // 跨局时这些引用可能已经被游戏 Dispose()，碰一下就 NRE（第二局报的就是这个）
+            if (_overlay != null && _overlay.isDisposed)
+            {
+                _overlay = null;
+            }
+            if (_appliedSkin != null && _appliedSkin.isDisposed)
+            {
+                _appliedSkin = null;
+                _appliedSource = null;
+            }
+            if (_appliedSource != null && _appliedSource.isDisposed)
+            {
+                _appliedSource = null;
+            }
             if (_overlay != null)
             {
                 try
@@ -869,9 +918,15 @@ namespace SkinChanceMod
             {
                 return;
             }
-            if (_nTextures.ContainsKey(relative))
+            NTexture existing;
+            if (_nTextures.TryGetValue(relative, out existing))
             {
-                return;
+                if (IsUsable(existing))
+                {
+                    return;
+                }
+                // 跨局之后旧的 NTexture 可能已被释放，重新排一次解码
+                _nTextures.Remove(relative);
             }
             lock (_jobLock)
             {
@@ -1551,7 +1606,7 @@ namespace SkinChanceMod
         /// <summary>编辑器开着时，把覆盖层改成可拖：按住拖 = 移动，按住 Ctrl 拖 = 缩放。</summary>
         private void EnsureEditorOverlay()
         {
-            if (_overlay == null)
+            if (_overlay == null || _overlay.isDisposed)
             {
                 return;
             }
@@ -1637,7 +1692,7 @@ namespace SkinChanceMod
         /// <summary>编辑器关掉后把立绘交还给游戏（不再拦截点击）。</summary>
         private void ReleaseEditorOverlay()
         {
-            if (_overlay == null)
+            if (_overlay == null || _overlay.isDisposed)
             {
                 return;
             }
@@ -1651,7 +1706,10 @@ namespace SkinChanceMod
                 if (_touchHost != null)
                 {
                     // 游戏在 InitTouchable 里把它设成 false，交还时恢复，免得挡住原本的点击穿透
-                    _touchHost.touchable = false;
+                    if (!_touchHost.isDisposed)
+                    {
+                        _touchHost.touchable = false;
+                    }
                     _touchHost = null;
                 }
             }

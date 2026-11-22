@@ -14,7 +14,7 @@
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.3.3.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
+1. 下载 Release 里的 `SkinChanceMod-1.3.4.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
 2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（135 个文件夹，每个文件夹里有一个 `config.json`）。
 3. 启动游戏，选人进局。
 
@@ -144,7 +144,7 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.3.zip` 与 `dist\skins.zip`（135 个文件夹，每个含 `config.json` + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.4.zip` 与 `dist\skins.zip`（135 个文件夹，每个含 `config.json` + 使用说明）。
 
 `tools\` 下是可重跑的生成脚本：`gen_skins_catalog.py`（从 GameData 生成 `SKINS.md` / `skins.json`）、`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
@@ -161,6 +161,7 @@ mods\SkinChanceMod\skins\
 
 ## 更新日志
 
+- **1.3.4**：修 **打完一局再开第二局就「资源丢失」** —— 局内 `BattleInfoPanel` 关闭时游戏会把整个 `UIBattleInfoPanel` 树 `Dispose()`（`UI\BasePanel.cs:146-156` 的 `ui?.Dispose()` → `GComponent.Dispose()` 倒序销毁所有子对象），我们挂在 `loader_Skin` 下的覆盖层也跟着被销毁；但模组字段还指着那个已销毁的 `GLoader`，下一局 `EnsureOverlay()` 只看 `parent`、于是把死对象 `AddChild` 回去，一碰 `texture`/`SetSize` 就 `NullReferenceException`（日志里那条 `轮询失败：Object reference not set to an instance of an object.`），立绘就不出来了。现在 `EnsureOverlay()` / `Restore()` / 编辑器接管 / 释放前后都判 `isDisposed`，销毁过的对象直接丢弃重建；贴图缓存也加了 `IsUsable()`（`NTexture.disposed` 或 `nativeTexture == null` 就丢掉重新解码）。
 - **1.3.3**：①修 **F12 直接卡死** —— 1.3.2 的排版依赖 `GTextField.textHeight`（`autoSize = Height`）并把算出来的高度直接喂给 `DrawRect`/`SetSize`，标题带 UBB 或字号偏大时会算出异常高度，FairyGUI 立刻卡住；现在编辑器改成**固定尺寸布局**（`autoSize = None`，全部常量定位，460×300），再也不查 `textHeight`。②解码器支持更多格式：新增 `ImageDecoder.cs`，后台线程按文件头认格式，**PNG / BMP / TGA 纯托管解码**（BMP 支持 8 位调色板/24/32 位，TGA 支持 24/32 位、8/16 位灰度、RLE），其余格式（JPG / GIF / PSD / EXR / HDR …）把原始字节带回主线程交给引擎 `ImageConversion.LoadImage`；不再依赖第三方 dll（已移除 `StbImageSharp` 试验包）。贴图上传日志会带上格式名。
 - **1.3.2**：①编辑器**保存成功后直接关闭**（写完 `config.json` 就退出编辑态，把立绘交还游戏，不用再手点关闭）；②编辑器排版改为按文字实际高度自上而下流式排列（这一版会导致 F12 卡死，已在 1.3.3 换回固定尺寸）。
 - **1.3.1**：①修编辑器**拖动立绘收不到事件**的问题 —— 游戏在 `BattleInfoPanel.InitTouchable()` 里把 `loader_Skin.touchableAll = false`，而 FairyGUI 的 `DisplayObject.InternalHitTest()` 是「父级不可触摸就不下探子对象」，所以只把覆盖层设成 `touchable` 没用；现在打开编辑器时临时把宿主 `UICom_HeroSkin` 的 `touchable` 放开，关闭时再还原。②对照表重抽并排除 DIY 角色 `9001 天川苍鲤`（立绘复用 `UT_Hero_Card_307`，不是正式皮肤），135 条；`307`/`308` 保留。③新增「当前皮肤」日志（`当前皮肤：ItemID …（立绘 …），规则 … 条里命中 … 档候选` / `当前皮肤未配置（ItemID …）`），换皮肤就能直接从日志看出摸到了哪张皮、有没有对应文件夹。
@@ -179,7 +180,7 @@ mods\SkinChanceMod\skins\
 - 只处理**自己**的立绘；观战、结算、房间、主页等其它地方的立绘不碰（那里走 `GetDefeatStandingPaintingById`，不是同一套接口）。
 - 立绘是视频且 `hideFightVideo=false` 时接管不到（视频是 `GGraph` 播放，不是贴图）。
 - 编辑器改的是**当前血量命中的那一档**；命中档是「游戏原图」时，编辑器里的缩放/偏移不会立刻可见（原图没有可叠的覆盖层尺寸），把 `image` 改成真图名后才看得到效果。
-- 游戏重设 `loader_Skin_Image.url` 时不会打断接管，但如果立绘整体重建（换人、重开一局），下一轮轮询会重新接管。
+- 游戏重设 `loader_Skin_Image.url` 时不会打断接管，但如果立绘整体重建（换人、重开一局），下一轮轮询会重新接管（1.3.4 起会先丢掉上一局已销毁的覆盖层再重建）。
 - 图片格式：PNG / BMP / TGA 走后台线程；JPG / GIF / PSD / EXR / HDR 走引擎主线程解码（大图切档可能顿一下）。**WebP / AVIF / JPEG2000 引擎不支持**，请先转 PNG。
 - `config.json` 用的是普通 JSON，注释不支持（SDK 的解析器不认 `//`）。
 
