@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
-$ver = '1.3.0'
+$ver = '1.3.1'
 
 dotnet build "$root\src\SkinChanceMod" -c Release -v q --nologo
 if ($LASTEXITCODE -ne 0) { throw "dotnet build failed" }

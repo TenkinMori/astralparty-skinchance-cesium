@@ -1,11 +1,12 @@
 # 角色 / 皮肤 / 立绘资源对照表
 
-自动从客户端 GameData 抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。
+自动从客户端 GameData（3.3.0）抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。生成脚本：`tools/gen_skins_catalog.py`。
 
 - 配置里的 `itemId` 填本表「皮肤 ItemID」；未配置的皮肤不会被动。
 - **左下角立绘** = `SkinStandingPaintingConfigureItem.Character`（`BattleInfoPanel.RefreshHeroSkin()` → `GetCharacterInGame()`，`InGameCharacter` 全表只有 1 条非空，实际都走 `Character`）；AngelMode 下优先用同名的 `_sfw` 变体。
 - `Bust` 字段不是左下角立绘：只有 `FightWindow.cs:888` 的「发起 PK」图标用它（按金币阈值取 `[0]`/`[1]`），不要拿它当战损图。
 - 同一角色有多张皮肤，**ItemID 才是唯一键**（heroId 只用来分组）。
+- 已排除 9001（天川苍鲤）的 DIY 占位条目：它的立绘复用了 `UT_Hero_Card_307`，不是正式皮肤。
 
 | 角色 | 角色ID | 立绘组 | 皮肤 ItemID | 皮肤名 | 默认 | 左下立绘 | PK 图集 |
 |---|---|---|---|---|---|---|---|
@@ -144,6 +145,5 @@
 | 橘雪莉 | 306 | 306 | 100306001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_306 | UT_Hero_Bust_306_0 / UT_Hero_Bust_306_1 |
 | 角色 307 | 307 | 307 | 100307001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
 | 角色 308 | 308 | 308 | 100308001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_308 | UT_Hero_Bust_308_0 / UT_Hero_Bust_308_1 |
-| 天川苍鲤 | 9001 | 9001 | 1009001001 | 初始皮肤-天川苍鲤 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
 
-共 **38** 个角色、**136** 条皮肤立绘。
+共 **37** 个角色、**135** 条皮肤立绘。

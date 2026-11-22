@@ -2518,23 +2518,5 @@
       "UT_Hero_Bust_308_1"
     ],
     "bustSfw": []
-  },
-  {
-    "heroId": 9001,
-    "heroName": "天川苍鲤",
-    "group": 9001,
-    "itemId": 1009001001,
-    "skinName": "初始皮肤-天川苍鲤",
-    "isDefault": true,
-    "index": 0,
-    "appearanceType": 0,
-    "character": "UT_Hero_Card_307",
-    "inGameCharacter": "",
-    "inGameCharacterSfw": "",
-    "bust": [
-      "UT_Hero_Bust_307_0",
-      "UT_Hero_Bust_307_1"
-    ],
-    "bustSfw": []
   }
 ]

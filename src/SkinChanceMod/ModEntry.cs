@@ -99,6 +99,8 @@ namespace SkinChanceMod
         private Vector2 _geomBaseScale;
 
         private string _loggedImage;
+        /// <summary>上一次打过日志的皮肤 ItemID，用来在换皮肤时再打一条「当前皮肤」。</summary>
+        private int _loggedItemId;
         private double _nextPoll;
         private bool _ready;
         private int _preloadedItem;
@@ -131,6 +133,9 @@ namespace SkinChanceMod
         private float _dragStartOffsetY;
         private float _dragStartScale;
 
+        /// <summary>被我们临时放开的宿主组件（游戏原本是 touchableAll = false），收起编辑器时还原。</summary>
+        private GComponent _touchHost;
+
         public override string Name
         {
             get { return "战损立绘"; }
@@ -138,7 +143,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.3.0"; }
+            get { return "1.3.1"; }
         }
 
         public override string Author
@@ -324,8 +329,21 @@ namespace SkinChanceMod
             List<SkinCandidate> candidates = SkinRules.Candidates(_rules, itemId, percent);
             if (candidates.Count == 0)
             {
+                if (_loggedItemId != itemId)
+                {
+                    _loggedItemId = itemId;
+                    Log.Info("当前皮肤未配置（ItemID " + itemId + "，立绘 " + (_paintingName ?? "?")
+                        + "）：到 skins 下对应文件夹里放图或改 config.json。");
+                }
                 Restore();
                 return;
+            }
+
+            if (_loggedItemId != itemId)
+            {
+                _loggedItemId = itemId;
+                Log.Info("当前皮肤：ItemID " + itemId + "（立绘 " + (_paintingName ?? "?") + "），规则 "
+                    + _rules.Count + " 条里命中 " + candidates.Count + " 档候选。");
             }
 
             Apply(skin, candidates, percent);
@@ -1487,6 +1505,15 @@ namespace SkinChanceMod
             }
             try
             {
+                // 游戏在 BattleInfoPanel.InitTouchable() 里写死了 loader_Skin.touchableAll = false，
+                // 而 FairyGUI 的 DisplayObject.InternalHitTest 是「父级不可触摸就不下探子对象」，
+                // 所以只把覆盖层设成 touchable 收不到任何事件，必须先把宿主 GComponent 放开。
+                GComponent host = _overlay.parent;
+                if (host != null)
+                {
+                    host.touchable = true;
+                    _touchHost = host;
+                }
                 _overlay.touchable = true;
                 _overlay.onTouchBegin.Remove(OnSkinTouchBegin);
                 _overlay.onTouchBegin.Add(OnSkinTouchBegin);
@@ -1565,6 +1592,12 @@ namespace SkinChanceMod
                 _overlay.onTouchMove.Remove(OnSkinTouchMove);
                 _overlay.onTouchEnd.Remove(OnSkinTouchEnd);
                 _overlay.touchable = false;
+                if (_touchHost != null)
+                {
+                    // 游戏在 InitTouchable 里把它设成 false，交还时恢复，免得挡住原本的点击穿透
+                    _touchHost.touchable = false;
+                    _touchHost = null;
+                }
             }
             catch
             {
