@@ -151,7 +151,7 @@ namespace SkinChanceMod
 
         public override string Version
         {
-            get { return "1.3.4"; }
+            get { return "1.3.5"; }
         }
 
         public override string Author

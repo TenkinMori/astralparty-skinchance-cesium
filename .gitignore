@@ -1,5 +1,10 @@
-﻿bin/
+bin/
 obj/
 *.user
 .vs/
 release/
+
+# 从游戏客户端抽出来的 GameData（用 tools/extract_client_gamedata.py 现抽）
+gamedata/
+__pycache__/
+*.pyc

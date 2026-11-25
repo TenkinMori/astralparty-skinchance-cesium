@@ -342,6 +342,24 @@
     "bustSfw": []
   },
   {
+    "heroId": 104,
+    "heroName": "小町",
+    "group": 104,
+    "itemId": 100104005,
+    "skinName": "秘密清扫-小町",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_104_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_104_03_0",
+      "UT_Hero_Bust_104_03_1"
+    ],
+    "bustSfw": []
+  },
+  {
     "heroId": 105,
     "heroName": "派德曼",
     "group": 105,
@@ -1992,6 +2010,27 @@
     "bustSfw": []
   },
   {
+    "heroId": 123,
+    "heroName": "姬梦朝",
+    "group": 123,
+    "itemId": 100123005,
+    "skinName": "玉兔挥毫-姬梦朝",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 1,
+    "character": "UT_Hero_Card_123_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_123_03_1",
+      "UT_Hero_Bust_123_03_0"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_123_03_1",
+      "UT_Hero_Bust_123_03_0_sfw"
+    ]
+  },
+  {
     "heroId": 124,
     "heroName": "照",
     "group": 124,
@@ -2060,6 +2099,24 @@
     "bust": [
       "UT_Hero_Bust_124_02_0",
       "UT_Hero_Bust_124_02_1"
+    ],
+    "bustSfw": []
+  },
+  {
+    "heroId": 124,
+    "heroName": "照",
+    "group": 124,
+    "itemId": 100124005,
+    "skinName": "踏秋寻芳-照",
+    "isDefault": false,
+    "index": 4,
+    "appearanceType": 2,
+    "character": "UT_Hero_Card_124_03",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_124_03_0",
+      "UT_Hero_Bust_124_03_1"
     ],
     "bustSfw": []
   },
@@ -2340,6 +2397,48 @@
     ]
   },
   {
+    "heroId": 130,
+    "heroName": "苍鲤",
+    "group": 130,
+    "itemId": 100130001,
+    "skinName": "初始皮肤-苍鲤",
+    "isDefault": true,
+    "index": 0,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_130",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_130_0",
+      "UT_Hero_Bust_130_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_130_0_sfw",
+      "UT_Hero_Bust_130_1_sfw"
+    ]
+  },
+  {
+    "heroId": 130,
+    "heroName": "苍鲤",
+    "group": 130,
+    "itemId": 100130002,
+    "skinName": "羁绊皮肤-苍鲤",
+    "isDefault": false,
+    "index": 1,
+    "appearanceType": 0,
+    "character": "UT_Hero_Card_130_Max",
+    "inGameCharacter": "",
+    "inGameCharacterSfw": "",
+    "bust": [
+      "UT_Hero_Bust_130_Max_0",
+      "UT_Hero_Bust_130_Max_1"
+    ],
+    "bustSfw": [
+      "UT_Hero_Bust_130_Max_0_sfw",
+      "UT_Hero_Bust_130_Max_1_sfw"
+    ]
+  },
+  {
     "heroId": 301,
     "heroName": "超绝最可爱天使酱",
     "group": 301,
@@ -2485,7 +2584,7 @@
   },
   {
     "heroId": 307,
-    "heroName": "角色 307",
+    "heroName": "远野汉娜",
     "group": 307,
     "itemId": 100307001,
     "skinName": "初始皮肤-远野汉娜",
@@ -2503,7 +2602,7 @@
   },
   {
     "heroId": 308,
-    "heroName": "角色 308",
+    "heroName": "橘雪莉",
     "group": 308,
     "itemId": 100308001,
     "skinName": "初始皮肤-橘雪莉",

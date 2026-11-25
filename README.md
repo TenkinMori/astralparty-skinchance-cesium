@@ -5,20 +5,20 @@
 - 只影响**自己**的立绘，队友和敌人不受影响。
 - 按**皮肤**（`ItemID`）配置，同一角色穿不同皮肤可以配不同的一套图。
 - **每张皮肤一个文件夹，文件夹里有自己的 `config.json`**：阈值、图名、缩放、偏移都在里面改，改完保存就生效（热重载，不用重进游戏）。
-- **全部 135 张皮肤的文件夹和 `config.json` 都已预置好，你只要把贴图丢进去**（PNG / BMP / TGA / JPG 都认）。
+- **全部 140 张皮肤的文件夹和 `config.json` 都已预置好，你只要把贴图丢进去**（PNG / BMP / TGA / JPG 都认）。
 - **局内按 F12 打开编辑器**，直接拖动立绘调大小和位置，点「保存到配置」写回该皮肤的 `config.json`，点「恢复默认」回到 1 倍无偏移。
 
-> 资源名对照表见 [SKINS.md](SKINS.md)：按最新 GameData（3.3.0）抽取，共 37 个角色、135 条皮肤立绘，`皮肤 ItemID` 就是文件夹名前缀。
+> 资源名对照表见 [SKINS.md](SKINS.md)：从游戏客户端自己的 GameData（3.3.0）抽取，共 38 个角色、140 条皮肤立绘，`皮肤 ItemID` 就是文件夹名前缀。
 >
 > **只想会用、不想看原理** → 看 [使用说明.md](使用说明.md)（装在哪、怎么放图、`config.json` 每个键什么意思、常见配方、排查表）。
 
 ## 安装
 
-1. 下载 Release 里的 `SkinChanceMod-1.3.4.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
-2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（135 个文件夹，每个文件夹里有一个 `config.json`）。
+1. 下载 Release 里的 `SkinChanceMod-1.3.5.zip`，解压到 `Astral Party\AstralParty_ModLoader\mods\SkinChanceMod\`，应当能看到 `SkinChanceMod.dll`、`SkinChanceMod.json`、`icon.png`、`SKINS.md`、`使用说明.md`。
+2. 再下载 `skins.zip`，把里面的 `skins\` 解压到同一个模组目录（140 个文件夹，每个文件夹里有一个 `config.json`）。
 3. 启动游戏，选人进局。
 
-> 第 2 步也可以跳过：首次启动会自动建好 135 个文件夹并给每个写一份默认 `config.json`。
+> 第 2 步也可以跳过：首次启动会自动建好 140 个文件夹并给每个写一份默认 `config.json`。
 
 ## 使用
 
@@ -120,14 +120,14 @@ mods\SkinChanceMod\skins\
 日志前缀 `[SkinChanceMod]`，正常接管时会看到：
 
 ```
-[SkinChanceMod] 已建好 135 个皮肤文件夹：...\mods\SkinChanceMod\skins
-[SkinChanceMod] 已补上 135 份默认 config.json。
-[SkinChanceMod] 战损立绘已加载：共 135 条皮肤规则。
-[SkinChanceMod] 当前皮肤：ItemID 100117006（立绘 UT_Hero_Card_117_04），规则 135 条里命中 3 档候选。
+[SkinChanceMod] 已建好 140 个皮肤文件夹：...\mods\SkinChanceMod\skins
+[SkinChanceMod] 已补上 140 份默认 config.json。
+[SkinChanceMod] 战损立绘已加载：共 140 条皮肤规则。
+[SkinChanceMod] 当前皮肤：ItemID 100117006（立绘 UT_Hero_Card_117_04），规则 140 条里命中 3 档候选。
 [SkinChanceMod] 已加载贴图 1261x2048：...\skins\100117006_钢羽森姬-茉莉\1.png
 [SkinChanceMod] 立绘已切换：1.png（HP 48%）
 [SkinChanceMod] 立绘已切换：游戏原图（HP 100%）
-[SkinChanceMod] 皮肤配置已更新：共 135 条规则。
+[SkinChanceMod] 皮肤配置已更新：共 140 条规则。
 [SkinChanceMod] 编辑器已打开：100117006_钢羽森姬-茉莉 第 3 档（1.png）。
 [SkinChanceMod] 立绘已调整：缩放 1.05，偏移 12,-8（点保存写回配置）。
 [SkinChanceMod] 已保存：config.json 第 3 档（缩放 1.05，偏移 12,-8）。
@@ -144,7 +144,7 @@ mods\SkinChanceMod\skins\
 .\build.ps1
 ```
 
-产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.4.zip` 与 `dist\skins.zip`（135 个文件夹，每个含 `config.json` + 使用说明）。
+产物在 `dist\SkinChanceMod\`，并打包成 `dist\SkinChanceMod-1.3.5.zip` 与 `dist\skins.zip`（140 个文件夹，每个含 `config.json` + 使用说明）。
 
 `tools\` 下是可重跑的生成脚本：`gen_skins_catalog.py`（从 GameData 生成 `SKINS.md` / `skins.json`）、`gen_skin_defaults.py`（从 `skins.json` 生成 `SkinDefaults.cs`）、`make_skins_zip.py`（打 `skins.zip`）。
 
@@ -154,13 +154,14 @@ mods\SkinChanceMod\skins\
 - 反编译核对：`UIBattleInfoPanel.cs:41/355`、`UICom_HeroSkin.cs`、`BattleInfoPanel.cs:529`、`CommonUIManager.cs:393`、`BattleProperty.cs:22/24`、`GLoader.cs:41/295/505`、`NGraphics.cs:150`。
 - 半身取景：原版靠 `Skin.bin` 顶层 `Offsets`（`SkinOffsetConfigure.CharacterStateSkinOffsetX/Y` + `CharacterStateSkinScale`）把 1261×2048 的全身图裁成半身，运行时经 `HeroSkinOffset`（`bustSkinOffset`/`bustSkinScale`）交给 `CommonUIManager.RendererSkin`；`UT_Hero_Card_117_04` 的取值是 offset `(95, 135)`、scale `0.66`。`GLoader.UpdateLayout()`（`GLoader.cs:561`）才真正应用 `customOffset`/`customScale`，而且只在设 `url`/`texture`/尺寸时跑 —— **先赋贴图再写偏移等于没写**。
 - 数据抽取：`Character.bin` 字段 27 = 立绘组，`Skin.bin` 顶层字段 1 = `StandingPaintings`，条目字段 3 = `ItemID`、字段 7 = `Character`（**左下角立绘**，`BattleInfoPanel.RefreshHeroSkin()` 就用它）、字段 15 = `Bust`（PK 弹窗小图，别混），皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`。
-- 数据源与版本：`Version.bin` = `3.3.0`（`server-repo\data\gamedata`，2026-10-16 快照，37 角色 / 135 条皮肤）。旧的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**。`9001 天川苍鲤` 是另一个项目的 DIY 角色（立绘复用 `UT_Hero_Card_307`），已从对照表排除；`307` / `308` 是正式角色占位，保留。
+- 数据源与版本：对照表从**游戏客户端自己的 GameData** 抽取（`Version.bin` = `3.3.0 / 1.0.0`），工具 `tools/extract_client_gamedata.py` 会从 `<游戏>\<profile>_Data\com.unity.addressables\AssetBundles\` 里找出那张含 160 个 TextAsset 的 gamedata bundle，把 `Character/Skin/Item/STRItem/STRCharacter/STRSkin/Version` 抽到 `gamedata/`（已在 `.gitignore`）。早先用的是 `server-repo\data\gamedata` 服务端重实现快照，它停在旧版本，**漏了 5 条皮肤**：`100104005 秘密清扫-小町`、`100123005 玉兔挥毫-姬梦朝`、`100124005 踏秋寻芳-照`、`100130001 初始皮肤-苍鲤`、`100130002 羁绊皮肤-苍鲤`（1.3.5 修复）。更早的 3.2.0 快照（36 角色 / 131 条）缺 `100117006` 等新皮肤，**已弃用**。`9001 天川苍鲤` 是另一个项目的 DIY 角色（立绘复用 `UT_Hero_Card_307`），已从对照表排除；`307` / `308` 是正式角色，保留。
 - 缺档退化：`SkinRules.Candidates` 命中档 → 更完好 → 更残；离线单测 231 项全过（`_skintest`，覆盖规则、原图判定、编辑器下标、目录读取、`SaveStages` 往返、默认值与越界夹取）。
 - 原图判定：`image` 只认裸 `"0"` 为原图；`"0.png"` 是文件名（有人会把图命名成 0.png），不会被当成原图吃掉。
 - 编辑器：`SkinRules.HitIndex` 返回的是 **`rule.stages` 里的下标**（不是排序后的顺序下标），编辑器靠它直接改用户写的那一档；`GLoader` 没有 `opaque` 属性（`opaque` 在 `GComponent`/`Container` 上），立绘拖动靠 `touchable` + `onTouchBegin/Move/End`。注意游戏在 `BattleInfoPanel.InitTouchable()`（`BattleInfoPanel.cs:333-337`）里写死 `loader_Skin.touchableAll = false`，`DisplayObject.InternalHitTest()`（`DisplayObject.cs:1245`）是「父级不可触摸就不下探子对象」，所以编辑器打开时必须临时放开宿主组件（1.3.1）。
 
 ## 更新日志
 
+- **1.3.5**：①对照表改从**游戏客户端自己的 GameData** 抽取（`tools/extract_client_gamedata.py`，直接从游戏的 Addressables 缓存里解出 gamedata bundle），补上之前漏掉的 5 条皮肤：`100104005 秘密清扫-小町`、`100123005 玉兔挥毫-姬梦朝`、`100124005 踏秋寻芳-照`，以及新角色 **130 苍鲤** 的 `100130001 初始皮肤-苍鲤` / `100130002 羁绊皮肤-苍鲤`。②`SkinDefaults` / `skins.zip` / `SKINS.md` 同步到 **38 个角色 / 140 条皮肤**，游戏里会自动补建新增的 5 个文件夹与默认 `config.json`。
 - **1.3.4**：修 **打完一局再开第二局就「资源丢失」** —— 局内 `BattleInfoPanel` 关闭时游戏会把整个 `UIBattleInfoPanel` 树 `Dispose()`（`UI\BasePanel.cs:146-156` 的 `ui?.Dispose()` → `GComponent.Dispose()` 倒序销毁所有子对象），我们挂在 `loader_Skin` 下的覆盖层也跟着被销毁；但模组字段还指着那个已销毁的 `GLoader`，下一局 `EnsureOverlay()` 只看 `parent`、于是把死对象 `AddChild` 回去，一碰 `texture`/`SetSize` 就 `NullReferenceException`（日志里那条 `轮询失败：Object reference not set to an instance of an object.`），立绘就不出来了。现在 `EnsureOverlay()` / `Restore()` / 编辑器接管 / 释放前后都判 `isDisposed`，销毁过的对象直接丢弃重建；贴图缓存也加了 `IsUsable()`（`NTexture.disposed` 或 `nativeTexture == null` 就丢掉重新解码）。
 - **1.3.3**：①修 **F12 直接卡死** —— 1.3.2 的排版依赖 `GTextField.textHeight`（`autoSize = Height`）并把算出来的高度直接喂给 `DrawRect`/`SetSize`，标题带 UBB 或字号偏大时会算出异常高度，FairyGUI 立刻卡住；现在编辑器改成**固定尺寸布局**（`autoSize = None`，全部常量定位，460×300），再也不查 `textHeight`。②解码器支持更多格式：新增 `ImageDecoder.cs`，后台线程按文件头认格式，**PNG / BMP / TGA 纯托管解码**（BMP 支持 8 位调色板/24/32 位，TGA 支持 24/32 位、8/16 位灰度、RLE），其余格式（JPG / GIF / PSD / EXR / HDR …）把原始字节带回主线程交给引擎 `ImageConversion.LoadImage`；不再依赖第三方 dll（已移除 `StbImageSharp` 试验包）。贴图上传日志会带上格式名。
 - **1.3.2**：①编辑器**保存成功后直接关闭**（写完 `config.json` 就退出编辑态，把立绘交还游戏，不用再手点关闭）；②编辑器排版改为按文字实际高度自上而下流式排列（这一版会导致 F12 卡死，已在 1.3.3 换回固定尺寸）。

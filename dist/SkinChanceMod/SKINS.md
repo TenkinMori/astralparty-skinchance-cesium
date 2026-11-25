@@ -1,6 +1,6 @@
 # 角色 / 皮肤 / 立绘资源对照表
 
-自动从客户端 GameData（3.3.0）抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。生成脚本：`tools/gen_skins_catalog.py`。
+自动从客户端自己下载的 GameData 抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。表用 `tools/extract_client_gamedata.py` 从游戏的 Addressables 缓存里抽，生成脚本：`tools/gen_skins_catalog.py`。
 
 - 配置里的 `itemId` 填本表「皮肤 ItemID」；未配置的皮肤不会被动。
 - **左下角立绘** = `SkinStandingPaintingConfigureItem.Character`（`BattleInfoPanel.RefreshHeroSkin()` → `GetCharacterInGame()`，`InGameCharacter` 全表只有 1 条非空，实际都走 `Character`）；AngelMode 下优先用同名的 `_sfw` 变体。
@@ -29,6 +29,7 @@
 | 小町 | 104 | 104 | 100104002 | 羁绊皮肤-小町 |  | UT_Hero_Card_104_Max | UT_Hero_Bust_104_Max_0 / UT_Hero_Bust_104_Max_1 |
 | 小町 | 104 | 104 | 100104003 | 忍者为何？-小町 |  | UT_Hero_Card_104_01 | UT_Hero_Bust_104_01_0 / UT_Hero_Bust_104_01_1 |
 | 小町 | 104 | 104 | 100104004 | 暗影狼灵-小町 |  | UT_Hero_Card_104_02 | UT_Hero_Bust_104_02_0 / UT_Hero_Bust_104_02_1 |
+| 小町 | 104 | 104 | 100104005 | 秘密清扫-小町 |  | UT_Hero_Card_104_03 | UT_Hero_Bust_104_03_0 / UT_Hero_Bust_104_03_1 |
 | 派德曼 | 105 | 105 | 100105001 | 初始皮肤-派德曼 | 是 | UT_Hero_Card_105 | UT_Hero_Bust_105_0 / UT_Hero_Bust_105_1 |
 | 派德曼 | 105 | 105 | 100105002 | 羁绊皮肤-派德曼 |  | UT_Hero_Card_105_Max | UT_Hero_Bust_105_Max_0 / UT_Hero_Bust_105_Max_1 |
 | 派德曼 | 105 | 105 | 100105003 | 酷暑难耐-派德曼 |  | UT_Hero_Card_105_01 | UT_Hero_Bust_105_01_0 / UT_Hero_Bust_105_01_1 |
@@ -116,10 +117,12 @@
 | 姬梦朝 | 123 | 123 | 100123002 | 羁绊皮肤-姬梦朝 |  | UT_Hero_Card_123_Max | UT_Hero_Bust_123_Max_0 / UT_Hero_Bust_123_Max_1 |
 | 姬梦朝 | 123 | 123 | 100123003 | 滨边时光-姬梦朝 |  | UT_Hero_Card_123_01 | UT_Hero_Bust_123_01_0 / UT_Hero_Bust_123_01_1 |
 | 姬梦朝 | 123 | 123 | 100123004 | 祥瑞天章-姬梦朝 |  | UT_Hero_Card_123_02 | UT_Hero_Bust_123_02_0 / UT_Hero_Bust_123_02_1 |
+| 姬梦朝 | 123 | 123 | 100123005 | 玉兔挥毫-姬梦朝 |  | UT_Hero_Card_123_03 | UT_Hero_Bust_123_03_1 / UT_Hero_Bust_123_03_0 |
 | 照 | 124 | 124 | 100124001 | 初始皮肤-照 | 是 | UT_Hero_Card_124 | UT_Hero_Bust_124_0 / UT_Hero_Bust_124_1 |
 | 照 | 124 | 124 | 100124002 | 羁绊皮肤-照 |  | UT_Hero_Card_124_Max | UT_Hero_Bust_124_Max_0 / UT_Hero_Bust_124_Max_1 |
 | 照 | 124 | 124 | 100124003 | 小护士-照 |  | UT_Hero_Card_124_01 | UT_Hero_Bust_124_01_0 / UT_Hero_Bust_124_01_1 |
 | 照 | 124 | 124 | 100124004 | 魔旅歌姬-照 |  | UT_Hero_Card_124_02 | UT_Hero_Bust_124_02_0 / UT_Hero_Bust_124_02_1 |
+| 照 | 124 | 124 | 100124005 | 踏秋寻芳-照 |  | UT_Hero_Card_124_03 | UT_Hero_Bust_124_03_0 / UT_Hero_Bust_124_03_1 |
 | 摩西 | 125 | 125 | 100125001 | 初始皮肤-摩西 | 是 | UT_Hero_Card_125 | UT_Hero_Bust_125_0 / UT_Hero_Bust_125_1 |
 | 摩西 | 125 | 125 | 100125002 | 羁绊皮肤-摩西 |  | UT_Hero_Card_125_Max | UT_Hero_Bust_125_Max_0 / UT_Hero_Bust_125_Max_1 |
 | 摩西 | 125 | 125 | 100125003 | 特殊委派-摩西 |  | UT_Hero_Card_125_01 | UT_Hero_Bust_125_01_0 / UT_Hero_Bust_125_01_1 |
@@ -135,6 +138,8 @@
 | 玲玲 | 128 | 128 | 100128003 | 安全员-玲玲 |  | UT_Hero_Card_128_01 | UT_Hero_Bust_128_01_0 / UT_Hero_Bust_128_01_1 |
 | 赛克斯 | 129 | 129 | 100129001 | 初始皮肤-赛克斯 | 是 | UT_Hero_Card_129 | UT_Hero_Bust_129_1 / UT_Hero_Bust_129_0 |
 | 赛克斯 | 129 | 129 | 100129002 | 羁绊皮肤-赛克斯 |  | UT_Hero_Card_129_Max | UT_Hero_Bust_129_Max_1 / UT_Hero_Bust_129_Max_0 |
+| 苍鲤 | 130 | 130 | 100130001 | 初始皮肤-苍鲤 | 是 | UT_Hero_Card_130 | UT_Hero_Bust_130_0 / UT_Hero_Bust_130_1 |
+| 苍鲤 | 130 | 130 | 100130002 | 羁绊皮肤-苍鲤 |  | UT_Hero_Card_130_Max | UT_Hero_Bust_130_Max_0 / UT_Hero_Bust_130_Max_1 |
 | 超绝最可爱天使酱 | 301 | 301 | 100301001 | 初始皮肤-超天酱 | 是 | UT_Hero_Card_301 | UT_Hero_Bust_301_0 / UT_Hero_Bust_301_1 |
 | 超绝最可爱天使酱 | 301 | 301 | 100301003 | 网络主播-超天酱 |  | UT_Hero_Card_301_01 | UT_Hero_Bust_301_01_0 / UT_Hero_Bust_301_01_1 |
 | 主播女孩 | 302 | 302 | 100301002 | 初始皮肤-糖糖 | 是 | UT_Hero_Card_302 | UT_Hero_Bust_302_0 / UT_Hero_Bust_302_1 |
@@ -143,7 +148,7 @@
 | 多萝西·海兹 | 304 | 304 | 100304001 | 初始皮肤-多萝西 | 是 | UT_Hero_Card_304 | UT_Hero_Bust_304_0 / UT_Hero_Bust_304_1 |
 | 远野汉娜 | 305 | 305 | 100305001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_305 | UT_Hero_Bust_305_1 / UT_Hero_Bust_305_0 |
 | 橘雪莉 | 306 | 306 | 100306001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_306 | UT_Hero_Bust_306_0 / UT_Hero_Bust_306_1 |
-| 角色 307 | 307 | 307 | 100307001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
-| 角色 308 | 308 | 308 | 100308001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_308 | UT_Hero_Bust_308_0 / UT_Hero_Bust_308_1 |
+| 远野汉娜 | 307 | 307 | 100307001 | 初始皮肤-远野汉娜 | 是 | UT_Hero_Card_307 | UT_Hero_Bust_307_0 / UT_Hero_Bust_307_1 |
+| 橘雪莉 | 308 | 308 | 100308001 | 初始皮肤-橘雪莉 | 是 | UT_Hero_Card_308 | UT_Hero_Bust_308_0 / UT_Hero_Bust_308_1 |
 
-共 **37** 个角色、**135** 条皮肤立绘。
+共 **38** 个角色、**140** 条皮肤立绘。

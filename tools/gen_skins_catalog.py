@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """从 GameData 里抽出「角色 -> 皮肤 -> 立绘资源」对照表，生成 SKINS.md / skins.json。
 
-数据源（客户端抽出来的 protobuf 单表，3.3.0 快照）：
-  D:\\AstralPartyGit\\server-repo\\data\\gamedata\\{Character,Skin,Item,STRCharacter,STRItem}.bin
+数据源（**客户端自己下载的表**，先用 tools/extract_client_gamedata.py 从游戏的
+Addressables 缓存里抽到 <repo>/gamedata/）：
+  gamedata\\{Character,Skin,Item,STRCharacter,STRItem}.bin
+
+不用 server-repo 里的快照：那批表停在旧版本，会漏新皮肤
+（130 苍鲤、100104005 秘密清扫-小町、100123005 玉兔挥毫-姬梦朝、100124005 踏秋寻芳-照）。
 
 字段号来自反编译：
   CharacterInfoConfigure  : 4 NameID / 27 StandingPainting（立绘组 id）
@@ -11,21 +15,32 @@
                              15 Bust（repeated）/ 16 SfwBust
   ItemInfoConfigure       : 9 NameID → STRItem 里的中文皮肤名
 
-exclude_heroes：DIY 占位角色（307 / 308 / 9001）不在正式客户端资源里，
-  是另一个项目加进来的占位条目，不计入对照表。
+exclude_heroes：DIY 占位角色（9001 天川苍鲤）不在正式客户端资源里，
+  是另一个项目加进来的占位条目，不计入对照表。307 / 308 是正式角色，保留。
 """
 import json
 import os
 import struct
 
-TABLE_DIR = os.environ.get("SKIN_TABLE_DIR", r"D:\AstralPartyGit\server-repo\data\gamedata")
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TABLE_DIR = os.environ.get("SKIN_TABLE_DIR", os.path.join(REPO, "gamedata"))
 OUT_MD = os.path.join(REPO, "SKINS.md")
 OUT_JSON = os.path.join(REPO, "skins.json")
 
 # 9001（天川苍鲤）是另一个项目的 DIY 角色，立绘复用了 UT_Hero_Card_307，不计入。
 # 307 / 308 是正式角色，资源后续会上，不过滤。
 EXCLUDE_HEROES = {9001}
+
+# 客户端 STRCharacter / STRItem 里还没有 307 / 308 的名字（占位角色，资源未上），
+# 这里补上上游表里已有的正式名，免得文件夹名退化成「皮肤 100307001」。
+HERO_NAME_OVERRIDES = {
+    307: "远野汉娜",
+    308: "橘雪莉",
+}
+SKIN_NAME_OVERRIDES = {
+    100307001: "初始皮肤-远野汉娜",
+    100308001: "初始皮肤-橘雪莉",
+}
 
 
 def read_varint(data, i):
@@ -126,7 +141,7 @@ def main():
         scalars = {q: y for q, w, y in parse_fields(body) if w in (0, 5)}
         heroes.append({
             "id": hero_id,
-            "name": strs_char.get(scalars.get(4, 0), ""),
+            "name": HERO_NAME_OVERRIDES.get(hero_id) or strs_char.get(scalars.get(4, 0), ""),
             "group": scalars.get(27, hero_id),
         })
 
@@ -189,7 +204,7 @@ def main():
                 "heroName": hero["name"] or ("角色 %d" % hero["id"]),
                 "group": hero["group"],
                 "itemId": s["itemId"],
-                "skinName": skin_name(s["itemId"]),
+                "skinName": SKIN_NAME_OVERRIDES.get(s["itemId"]) or skin_name(s["itemId"]),
                 "isDefault": s["isDefault"],
                 "index": s["index"],
                 "appearanceType": s["appearanceType"],
@@ -207,8 +222,9 @@ def main():
     lines = [
         "# 角色 / 皮肤 / 立绘资源对照表",
         "",
-        "自动从客户端 GameData（3.3.0）抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，"
-        "皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。生成脚本：`tools/gen_skins_catalog.py`。",
+        "自动从客户端自己下载的 GameData 抽取（`Character.bin` 字段 27 = 立绘组，`Skin.bin` 的 `StandingPaintings`，"
+        "皮肤名取 `ItemInfoConfigure.NameID` → `STRItem`）。表用 `tools/extract_client_gamedata.py` 从游戏的 "
+        "Addressables 缓存里抽，生成脚本：`tools/gen_skins_catalog.py`。",
         "",
         "- 配置里的 `itemId` 填本表「皮肤 ItemID」；未配置的皮肤不会被动。",
         "- **左下角立绘** = `SkinStandingPaintingConfigureItem.Character`（`BattleInfoPanel.RefreshHeroSkin()` → "
